@@ -21,10 +21,12 @@ class handDetector():
         self.mpHands = mp.solutions.hands
         self.hands = self.mpHands.Hands(self.mode, self.maxHands, self.modelComplexity, self.detectionCon, self.trackCon)
         self.mpDraw = mp.solutions.drawing_utils
+        self.tipIds = [2,4,12,16,20] # id of fingertips
+        self.lmList = []
     
     # draw hand
     def findHands(self, img, draw=True):
-      
+        
         imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) # hands only use RGB images
         self.results = self.hands.process(imgRGB)
         # print(self.results.multi_hand_landmarks) # checks hand positions
@@ -38,7 +40,7 @@ class handDetector():
 
     # find position of landmarks
     def findPosition(self, img, handNo=0, draw=True):
-        lmList = []
+        self.lmList = []
 
         # get specific hand
         if self.results.multi_hand_landmarks:
@@ -48,10 +50,31 @@ class handDetector():
                 h, w, c = img.shape
                 cx, cy = int(lm.x * w), int(lm.y * h)
                 # print(id,cx,cy) # print id of landmark and position on screen
-                lmList.append([id, cx, cy])
+                self.lmList.append([id, cx, cy])
                 
                 #if id == 1: # emphasizes which landmark is tracked
-                if id==8:
+                if id==7:
                     # can change size, color
                     cv2.circle(img, (cx,cy), 15, (255, 0 ,255), cv2.FILLED)
-        return lmList
+        return self.lmList
+
+    # check which fingers are up
+    def fingersUp(self):
+        fingers = []
+        # Thumb
+        if self.lmList[self.tipIds[0]][1] < self.lmList[self.tipIds[0] - 1][1]: #edit
+            fingers.append(1)
+        else:
+            fingers.append(0)
+    
+        # Fingers
+        for id in range(1, 5):
+            if self.lmList[self.tipIds[id]][2] < self.lmList[self.tipIds[id] - 2][2]: #edit
+                fingers.append(1)
+            else:
+                fingers.append(0)
+    
+
+            # totalFingers = fingers.count(1)
+    
+        return fingers
