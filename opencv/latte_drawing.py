@@ -14,7 +14,7 @@ brushThickness = 15
 # open camera
 cap = cv2.VideoCapture(0) 
 # change size of camera screen
-cap.set(3, 500) # =width
+cap.set(3, 500) # width
 cap.set(4, 720)  #height
 
 # initialize detector class
@@ -22,7 +22,7 @@ detector = handDetector(detectionCon = 0.8)
 # initialize starting location
 x_prev, y_prev = 0, 0
 # draw on canvas instead of camera screen
-imgCanvas = np.zeros((720,1280,3), np.uint8)
+imgCanvas = np.zeros((720,1280,3), np.uint8) # canvas needs to happen in 112 graphics in
 
 while True:
     # import image
@@ -34,9 +34,9 @@ while True:
     lmList = detector.findPosition(img,0) # get landmark positions
 
     if len(lmList) != 0: # if landmark on screen
-        # print(lmList[4]) # int based on which landmark you want -> prints pos of that landmark
-
-        x_index, y_index = lmList[8][1:]
+        print(lmList[8]) # int based on which landmark you want -> prints pos of that landmark
+        print(lmList[8][1:])
+        x_index, y_index = lmList[8][1:] # x,y coordinates of finger
         x_mid, y_mid = lmList[12][1:]
 
         # check which fingers are up
@@ -66,7 +66,18 @@ while True:
         x_prev, y_prev = x_index, y_index # keep updating position of fingers
 
     cv2.putText(img, "Draw here!", (30,100), cv2.FONT_HERSHEY_PLAIN, 3, (255,0,255), 3)
+    
+    # remove prev picture
+    try: 
+        os.remove("Player drawing.jpg")
+    except: 
+        pass
+
     cv2.imshow("Latte art!", img)
     cv2.imshow("Canvas", imgCanvas) # show canvas of drawing
+    
+    #save file
+    cv2.imwrite("Player drawing.jpg", imgCanvas)
     cv2.waitKey(1) # 0 gives still images
+    
 
