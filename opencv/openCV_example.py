@@ -15,7 +15,7 @@ def cameraFired(app):
     -openCV images are all numpy arrays
     """
     # Example: You can blur the Camera!
-    app.frame = cv2.GaussianBlur(app.frame, (15,15), 0)
+    # app.frame = cv2.GaussianBlur(app.frame, (15,15), 0)
 
     # Example: You can flip the Camera: 
     # 0 means flipping around the x-axis and positive value (for example, 1) 

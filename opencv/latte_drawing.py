@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 import time
 import os
+from cmu_112_graphics_openCV import *
 
 # header image (color picker, countertop design)
 # choose colour to draw
