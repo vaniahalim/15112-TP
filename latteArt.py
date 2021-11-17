@@ -6,6 +6,7 @@
 from cmu_112_graphics_openCV import *
 from classes import *
 from tkinter import *
+from latte_drawing_copy import *
 
 '''''''''''''''''''''''''''''''''
 VIEW
@@ -15,7 +16,8 @@ def latteArtMode_redrawAll(app, canvas):
     canvas.create_text(app.width/2, app.height/10, text="Time for latte art!", font="Baskerville 24")
     canvas.create_image(app.width*0.9, app.height*0.9, image=app.rightArrowImg)
 
-    app.drawCamera(canvas)
+    # suggested func
+    canvas.create_image(0, 0, Image=cap)
 
 '''''''''''''''''''''''''''''''''
 CONTROLLER
@@ -28,9 +30,12 @@ def latteArtMode_mousePressed(app, event):
         app.mode = "latteArtMode"
 
 def latteArtMode_cameraFired(app):
-    app.cameraOpen = True
+    # suggested func
+    app.vid = cap
     
 
 def latteArtMode_keyPressed(app, event):
     if event.key == "q":
         App._theRoot.app.quit()
+
+

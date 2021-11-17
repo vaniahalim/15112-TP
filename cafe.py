@@ -1,13 +1,15 @@
 # SCREEN: cafeMode
 
 # SOURCES:
-# coffee machine image: 
-
+# barista image: https://www.vectorstock.com/royalty-free-vector/bearded-barista-man-icon-isometric-style-vector-30590888
+# waiter image: https://www.iconfinder.com/icons/6655714/barista_cartoon_girl_isometric_love_party_woman_icon
+# coffee machine image: https://www.vecteezy.com/vector-art/1983572-isometric-coffee-machine-illustrated-on-white-background
+# cup image: 
 
 # import modules
 from cmu_112_graphics_openCV import *
-import tkinter
-import classes
+from classes import *
+import random
 
 '''''''''''''''''''''''''''''''''
 MODEL
@@ -34,8 +36,15 @@ def cafeMode_redrawAll(app, canvas):
     canvas.create_image(app.barista.x, app.barista.y, image=app.barista.img)
     # draw waiter
     canvas.create_image(app.waiter.x, app.waiter.y, image=app.waiter.img)
+    # draw customer
+    if app.currCustomer != None:
+        canvas.create_image(app.currCustomer.x, app.currCustomer.y, image=app.currCustomer.img)
     # draw coffee machine
     canvas.create_image(app.cofMac.x, app.cofMac.y, image=app.cofMac.img)
+
+    if app.isOrdering:
+        canvas.create_text(app.currCustomer.x, app.currCustomer.y + 10, text=app.currCustomer.order)
+
     
 
 # draw grid of cafe
@@ -43,7 +52,7 @@ def drawLayout(app, canvas):
     for row in range(app.rows):
         for col in range(app.cols):
             (x1,y1,x2,y2) = getCellBounds(app, row, col)
-            canvas.create_rectangle(x1, y1, x2, y2, fill= app.board[row][col], width=4, outline='white')
+            canvas.create_rectangle(x1, y1, x2, y2, fill= app.board[row][col], width=4, outline="white")
 
 # helper: get coordinates of each cell in grid
 def getCellBounds(app, row, col): 
@@ -53,14 +62,65 @@ def getCellBounds(app, row, col):
     y2 = app.margin + ((row + 1) * app.cellSize)
 
     return [x1,y1,x2,y2]
+
+
+# 2d to isometric
+# SOURCES:
+# https://gamedevelopment.tutsplus.com/tutorials/creating-isometric-worlds-primer-for-game-developers-updated--cms-28392
+# https://gamedevelopment.tutsplus.com/tutorials/updated-primer-for-creating-isometric-worlds-continued--cms-28503
+
+# def cartIso(app,cartX, cartY):
+#     isoX = (cartX - cartY) * app.cellSize/2
+#     isoY = (cartX + cartY)/2
+#     return isoX, isoY
+
+# def isoCart(isoX, isoY):
+#     cartX = (2*isoY + isoX)/2
+#     cartY = (2*isoY - isoX)/2
+#     return cartX, cartY
+
+#  def cartToIso(self, cartX, cartY, scalingFactor):
+#         cartX -= self.offsetX 
+#         cartY -= self.offsetY 
+#         cartX = cartX / scalingFactor
+#         cartY = cartY / scalingFactor 
+#         isoX = cartX - cartY
+#         isoY = (cartX + cartY) / 2
+#         return isoX, isoY
+
+#     def isoToCart(self, isoX, isoY, scalingFactor):
+#         cartX = (2 * isoY + isoX) / 2
+#         cartY = (2 * isoY - isoX) / 2
+#         cartX = cartX / scalingFactor
+#         cartY = cartY / scalingFactor
+#         cartX += offsetX 
+#         cartY += offsetY 
+#         return cartX, cartY 
+
+#     def setUpIsometric(self):
+#         #self.tileWidthHalf = self.tileWidth//2
+#         #self.tileHeightHalf = self.tileHeight//2
+#         self.offsetX = -1000
+#         self.offsetY = -270
+
+
     
 '''''''''''''''''''''''''''''''''
 CONTROLLER
 '''''''''''''''''''''''''''''''''
 def cafeMode_timerFired(app):
-    # CITATION(barista): https://www.vectorstock.com/royalty-free-vector/bearded-barista-man-icon-isometric-style-vector-30590888
-    print(distance(app.activeChar.x, app.activeChar.y, app.cofMac.x, app.cofMac.y))
+    custImg = app.custImgs[random.randint(0, len(app.custImgs)-1)]
+    order = f"{app.orders[random.randint(0, len(app.orders)-1)]} with {app.milks[random.randint(0, len(app.milks)-1)]} milk, {app.arts[random.randint(0, len(app.arts)-1)]}"
+    # app.currOrder = [app.orders[ran]]
+    app.currCustomer = Customer("girl1", 0, 70, custImg, order)
+    app.customers.append(app.currCustomer)
 
+    print(app.currCustomer.x)
+    while app.currCustomer.x < app.waiter.x - 10:
+        app.currCustomer.x += 1
+    if app.currCustomer.x == app.waiter.x - 10:
+        app.isOrdering = True
+        
 
 # using arrow keys
 def cafeMode_keyPressed(app, event):
@@ -85,11 +145,12 @@ def cafeMode_keyPressed(app, event):
     
 # helper fn: move characters
 def moveChar(app, drow, dcol):
-    drow *=10
-    dcol *=10
+    drow *= 10
+    dcol *= 10
     char = app.activeChar
     char.x += drow
     char.y += dcol
+    # char.isoX, char.isoY = cartIso(char.x, char.y)
     
     if not moveIsLegal(app):
         char.x -= drow
@@ -103,8 +164,6 @@ def moveIsLegal(app):
         return True
     return False
 
-# helper fn: check character distance to object
-def distance(x0, y0, x1, y1):
-    return (((x0-x1)**2 + (y0-y1)**2)**0.5)
+
 
 
