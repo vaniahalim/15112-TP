@@ -5,7 +5,7 @@ from classes import *
 from home import *
 from cafe import *
 from makeDrink import *
-# from latteArt import *
+from latteArt import *
 import tkinter as tk
 import pickle
 import random
@@ -17,12 +17,12 @@ MODEL
 def appStarted(app):
     app.username = ""
     app.selectUser = tk.Entry()
+    app.timerdelay = 10
 
     app.mode = 'makeDrinkMode'
     print(app.mode)
     app.cameraOpen = False
-    app.timerDelay = 100000
-
+   
     # cafe grid layout
     app.rows, app.cols, app.cellSize, app.margin = cafeDimensions()
     app.margin = 20
@@ -46,32 +46,34 @@ def appStarted(app):
     # orders
     app.cup = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/topviewcup.png"), 0.9))
     app.orders = ['Latte', 'Macchiato', 'Cappucino', 'Cortado']
-    app.espresso = Base("espresso", "brown", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/coffebeans.png"),1/7)))
-    app.dairy = Base("dairy", "snow2", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/dairymilk.png"),1/7)))
-    app.oat = Base("oat", "blanchedalmond", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/oatmilk.png"),1/7)))
-    app.soy = Base("soy", "blancedalmond", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/soymilk.png"),1/7)))
-    app.almond = Base("almond", "blancedalmond", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/almondmilk.png"),1/7)))
+    app.espresso = Base("espresso", "#481C0A", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/coffebeans.png"),1/7)))
+    app.dairy = Base("dairy", "#F6F1EF", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/dairymilk.png"),1/7)))
+    app.oat = Base("oat", "#F2E8D4", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/oatmilk.png"),1/7)))
+    app.soy = Base("soy", "#F2E8D4", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/soymilk.png"),1/7)))
+    app.almond = Base("almond", "#F2E8D4", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/almondmilk.png"),1/7)))
     app.bases = ["espresso", "dairy", "oat", "soy", "almond"]
-    app.currBase = None
+    app.currBase = Base("empty", "#FFFFFF", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/coffebeans.png"),1/7)))
     app.foam = ['foam']
     app.arts = ['heart', 'star', 'flower']
     app.currOrder = set()
     app.drinkMade = set()
+    app.cupFull = False
 
     # app.flavors
 
-    # misc items
+    # furniture
     cofMacImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/cofmac.png"),1/20))
     app.cofMac = Furniture("cofMac", 300, 300, cofMacImg)
-
-    app.rightArrowImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/rightarrow.png"), 1/2))
     # app.furniture = [cofMac]
 
+    # miscellaneous
+    app.rightArrowImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/rightarrow.png"), 1/2))
+    app.leftArrowImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/leftarrow.png"), 1/2))
     app.clockTimer = []
     app.progressbar = []
 
     # openCV
-    app.vid = None
+    app.drawing = None
 
     # loading and saving into username
     # app.user = User()
@@ -93,6 +95,7 @@ CONTROLLER
   
 
 runApp(width = 640, height = 640)
+# print(combineColors(app, "#481C0A", "#481C0A"))
 
 # app started: load
 # timer fired: pickle.dump

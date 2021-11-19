@@ -16,8 +16,8 @@ MODEL
 '''''''''''''''''''''''''''''''''
 # helper: structure of cafe
 def cafeDimensions():
-    rows = 10
-    cols = 10
+    rows = 12
+    cols = 12
     cellSize = 50
     margin = 20
     return (rows, cols, cellSize, margin)
@@ -109,18 +109,19 @@ def getCellBounds(app, row, col):
 CONTROLLER
 '''''''''''''''''''''''''''''''''
 def cafeMode_timerFired(app):
+    # if app.isNewCustomer:
     custImg = app.custImgs[random.randint(0, len(app.custImgs)-1)]
-    order = f"{app.orders[random.randint(0, len(app.orders)-1)]} with {app.milks[random.randint(0, len(app.milks)-1)]} milk, {app.arts[random.randint(0, len(app.arts)-1)]}"
+    order = f"{app.orders[random.randint(0, len(app.orders)-1)]} with {app.bases[random.randint(0, len(app.bases)-1)]} milk, {app.arts[random.randint(0, len(app.arts)-1)]}"
     # app.currOrder = [app.orders[ran]]
-    app.currCustomer = Customer("girl1", 0, 70, custImg, order)
+    app.currCustomer = Customer("1", 0, 120, custImg, order)
     app.customers.append(app.currCustomer)
 
+    # while app.currCustomer.x < app.barista.x - 10:
+    app.currCustomer.x += 10
+    # if app.currCustomer.x == app.barista.x - 10:
+    #     app.isOrdering = True
+    #     app.currCustomer.x = app.barista.x - 10
     print(app.currCustomer.x)
-    while app.currCustomer.x < app.waiter.x - 10:
-        app.currCustomer.x += 1
-    if app.currCustomer.x == app.waiter.x - 10:
-        app.isOrdering = True
-        
 
 # using arrow keys
 def cafeMode_keyPressed(app, event):

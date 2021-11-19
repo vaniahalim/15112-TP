@@ -24,7 +24,7 @@ detector = handDetector(detectionCon = 0.8)
 # initialize starting location
 x_prev, y_prev = 0, 0
 # draw on canvas instead of camera screen
-imgCanvas = np.zeros((720,1280,3), np.uint8) # canvas needs to happen in 112 graphics in
+imgCanvas = np.zeros((720,1280,3), np.uint8) # canvas needs to happen in 112 graphics
 
 while True:
     # import image
