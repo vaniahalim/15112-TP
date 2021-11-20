@@ -604,6 +604,15 @@ class App(object):
         """Convert an opencv image to a tkinter image, to display in canvas."""
         rgb_image = cv2.cvtColor(app.frame, cv2.COLOR_BGR2RGB)
         pil_img = Image.fromarray(rgb_image)
+        pil_img = app.scaleImage(pil_img, 1/2)
+        tkImage = ImageTk.PhotoImage(image=pil_img)
+        return tkImage
+    
+    # modified to convert np array to Tkinter image
+    def imageToTk(app, image):
+        """Convert an canvas image to a tkinter image, to display in canvas."""
+        rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        pil_img = Image.fromarray(rgb_image)
         tkImage = ImageTk.PhotoImage(image=pil_img)
         return tkImage
         

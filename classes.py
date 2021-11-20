@@ -25,13 +25,16 @@ class Art(object):
         self.color = ""
 
 class Customer(object):
-    def __init__(self, name, x, y, img, order):
+    def __init__(self, name, x, y, img, drink, base, art, order):
         self.name = name
         self.x = x
         self.y = y
-        self.order = order
+        self.drink = drink
+        self.base = base
+        self.art = art
         self.art = ""
         self.img = img
+        self.order = order
 
 # helper fn: check character distance to object
 def distance(x0, y0, x1, y1):

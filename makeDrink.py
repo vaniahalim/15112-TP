@@ -7,6 +7,8 @@
 # oat milk: "https://www.flaticon.com/premium-icon/oats_3982829?term=oats&page=1&position=6&page=1&position=6&related_id=3982829&origin=search"
 # soy milk: "https://www.flaticon.com/premium-icon/soy-milk_3414349?term=soy%20milk&related_id=3414349"
 # almond milk: " https://www.flaticon.com/premium-icon/almond-milk_3414348?term=almond%20milk&page=1&position=48&page=1&position=48&related_id=3414348&origin=search"
+# milk foam: "https://www.flaticon.com/free-icon/streamer_2766658?term=milk%20foam&page=1&position=51&page=1&position=51&related_id=2766658&origin=search"
+
 
 # import modules
 from cmu_112_graphics_openCV import *
@@ -25,11 +27,12 @@ def makeDrinkMode_redrawAll(app, canvas):
     # drink options
     canvas.create_image(app.width/2+10, app.height/2+20, image=app.cup)
     canvas.create_image(app.width * (0.1), app.height * 0.15, image=app.espresso.img)
-    canvas.create_image(app.width * (0.1), app.height * 0.30, image=app.dairy.img)
-    canvas.create_image(app.width * (0.1), app.height * 0.45, image=app.oat.img)
-    canvas.create_image(app.width * (0.1), app.height * 0.60, image=app.soy.img)
-    canvas.create_image(app.width * (0.1), app.height * 0.75, image=app.almond.img)
-    canvas.create_oval(app.width/2-app.currBase.r, app.height/2-app.currBase.r, app.width/2+app.currBase.r, app.height/2+app.currBase.r, fill=app.currBase.color)
+    canvas.create_image(app.width * (0.1), app.height * 0.27, image=app.dairy.img)
+    canvas.create_image(app.width * (0.1), app.height * 0.39, image=app.oat.img)
+    canvas.create_image(app.width * (0.1), app.height * 0.51, image=app.soy.img)
+    canvas.create_image(app.width * (0.1), app.height * 0.63, image=app.almond.img)
+    canvas.create_image(app.width * (0.1), app.height * 0.75, image=app.foam.img)
+    canvas.create_oval(app.width/2-app.currBase.r, app.height/2-app.currBase.r, app.width/2+app.currBase.r, app.height/2+app.currBase.r, fill=app.currBase.color, width=0)
 
 '''''''''''''''''''''''''''''''''
 CONTROLLER
@@ -58,51 +61,67 @@ def makeDrinkMode_mousePressed(app, event):
    
     print(app.currBase.name)
     print(app.currBase.r)
+    print(app.drinkMade)
 
     # select bases
-    if distance(x, y, app.width * (0.1), app.height * 0.15) < 37:
+    if distance(x, y, app.width * (0.1), app.height * 0.15) < 26:
         if not app.cupFull:
             app.espresso.r += 10
             app.currBase.color = combineColors(app, app.currBase, app.espresso)
             app.currBase.r += 10
-        if app.currBase.r == 140:
+            app.drinkMade[app.espresso.name] = app.espresso.r
+        if app.currBase.r == 150:
             app.cupFull = True
         
-    elif distance(x, y, app.width * (0.1), app.height * 0.30) < 37:
+    elif distance(x, y, app.width * (0.1), app.height * 0.27) < 26:
         if not app.cupFull:
             app.dairy.r += 10
             app.currBase.color = combineColors(app, app.currBase, app.dairy)
             app.currBase.r += 10
-        if app.currBase.r == 140:
+            app.drinkMade[app.dairy.name] = app.dairy.r
+        if app.currBase.r == 150:
             app.cupFull = True
 
-    elif distance(x, y, app.width * (0.1), app.height * 0.45) < 37 :
+    elif distance(x, y, app.width * (0.1), app.height * 0.39) < 26 :
         if not app.cupFull:
             app.oat.r += 10
             app.currBase.color = combineColors(app, app.currBase, app.oat)
             app.currBase.r += 10
-        if app.currBase.r == 140:
+            app.drinkMade[app.oat.name] = app.oat.r
+        if app.currBase.r == 150:
             app.cupFull = True
 
-    elif distance(x, y, app.width * (0.1), app.height * 0.60) < 37:
+    elif distance(x, y, app.width * (0.1), app.height * 0.51) < 26:
         if not app.cupFull:
             app.soy.r += 10
             app.currBase.color = combineColors(app, app.currBase, app.soy)
             app.currBase.r += 10
-        if app.currBase.r == 140:
+            app.drinkMade[app.soy.name] = app.soy.r
+        if app.currBase.r == 150:
             app.cupFull = True
             
-    elif distance(x, y, app.width * (0.1), app.height * 0.75) < 37:
+    elif distance(x, y, app.width * (0.1), app.height * 0.63) < 26:
         if not app.cupFull:
             app.almond.r += 10
             app.currBase.color = combineColors(app, app.currBase, app.almond)
             app.currBase.r += 10
-        if app.currBase.r == 140:
+            app.drinkMade[app.almond.name] = app.almond.r
+        if app.currBase.r == 150:
+            app.cupFull = True
+
+    elif distance(x, y, app.width * (0.1), app.height * 0.75) < 26:
+        if not app.cupFull:
+            app.foam.r += 10
+            app.currBase.color = app.foam.color
+            app.currBase.r += 10
+            app.drinkMade[app.foam.name] = app.foam.r
+        if app.currBase.r == 150:
             app.cupFull = True
 
     # button to go to latte art page
     elif distance(x, y, app.width*0.92, app.height*0.92) < 30:
         app.mode = "latteArtMode"
+        
     # button to go to cafe page
     elif distance(x, y, app.width*0.1, app.height*0.92) < 30:
         app.mode = "cafeMode"

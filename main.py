@@ -19,10 +19,11 @@ def appStarted(app):
     app.selectUser = tk.Entry()
     app.timerdelay = 10
 
-    app.mode = 'makeDrinkMode'
+    app.mode = 'latteArtMode'
     print(app.mode)
     app.cameraOpen = False
-   
+    app.disp_cam = False
+    
     # cafe grid layout
     app.rows, app.cols, app.cellSize, app.margin = cafeDimensions()
     app.margin = 20
@@ -30,40 +31,51 @@ def appStarted(app):
     app.board = [([app.emptyColor] * app.cols) for row in range(app.rows)]
    
     # characters
-    baristaImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/barista.jpg"),1/20))
-    app.barista = Character("barista", 370, 120, baristaImg)
-    waiterImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/waiter.jpg"),1/20))
+    baristaImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/barista.png"),1/10))
+    app.barista = Character("barista", 370 , 120, baristaImg)
+    waiterImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/waiter.png"),1/8))
     app.waiter = Character("waiter", 370, 370, waiterImg)
     app.activeChar = app.barista
 
     # customers
-    girl1Img = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/girl1.png"),1/20))
-    app.custImgs = [girl1Img]
+    girl1Img = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/girl1.png"),1/4))
+    girl2Img = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/girl2.png"),1/4))
+    boy1Img = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/boy1.png"),1/4))
+    boy2Img = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/boy2.png"),1/4))
+
+    app.custImgs = [girl1Img, girl2Img, boy1Img, boy2Img]
     app.customers = []
     app.currCustomer = None
+    app.isEntering = False
     app.isOrdering = False
+    app.isWaiting = False
+    app.isServing = False
 
     # orders
     app.cup = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/topviewcup.png"), 0.9))
-    app.orders = ['Latte', 'Macchiato', 'Cappucino', 'Cortado']
-    app.espresso = Base("espresso", "#481C0A", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/coffebeans.png"),1/7)))
-    app.dairy = Base("dairy", "#F6F1EF", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/dairymilk.png"),1/7)))
-    app.oat = Base("oat", "#F2E8D4", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/oatmilk.png"),1/7)))
-    app.soy = Base("soy", "#F2E8D4", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/soymilk.png"),1/7)))
-    app.almond = Base("almond", "#F2E8D4", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/almondmilk.png"),1/7)))
+    app.drinks = ['Latte', 'Macchiato', 'Cappucino', 'Cortado']
+    app.espresso = Base("espresso", "#481C0A", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/coffebeans.png"),1/10)))
+    app.dairy = Base("dairy", "#F6F1EF", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/dairymilk.png"),1/10)))
+    app.oat = Base("oat", "#F2E8D4", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/oatmilk.png"),1/10)))
+    app.soy = Base("soy", "#F2E8D4", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/soymilk.png"),1/10)))
+    app.almond = Base("almond", "#F2E8D4", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/almondmilk.png"),1/10)))
     app.bases = ["espresso", "dairy", "oat", "soy", "almond"]
-    app.currBase = Base("empty", "#FFFFFF", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/coffebeans.png"),1/7)))
-    app.foam = ['foam']
+    app.currBase = Base("empty", "#FFFFFF", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/coffebeans.png"),1/10)))
+    app.foam = Base("foam", "#FFFFFF", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/steamer.png"),1/10)))
     app.arts = ['heart', 'star', 'flower']
-    app.currOrder = set()
-    app.drinkMade = set()
+    app.currOrder = dict()
+    app.drinkMade = dict()
     app.cupFull = False
 
     # app.flavors
 
     # furniture
-    cofMacImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/cofmac.png"),1/20))
-    app.cofMac = Furniture("cofMac", 300, 300, cofMacImg)
+    cofMacImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/cofmac.png"),1/10))
+    app.cofMac = Furniture("cofMac", 495, 245, cofMacImg)
+    app.board[getRow(app, app.cofMac.y)][getCol(app, app.cofMac.x)] = "blue"
+
+    tableImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/table.png"),1/10))
+    app.table = Furniture("table", random.randint(70, 170), random.randint(320, 520), tableImg)
     # app.furniture = [cofMac]
 
     # miscellaneous
@@ -73,7 +85,12 @@ def appStarted(app):
     app.progressbar = []
 
     # openCV
-    app.drawing = None
+    app.imgCanvas = np.zeros((200,200,3), np.uint8)
+
+    # scoring
+    app.isCorrectBase = False
+    app.isCorrectProportions = False
+    app.score = 0
 
     # loading and saving into username
     # app.user = User()

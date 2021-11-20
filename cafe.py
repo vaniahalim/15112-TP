@@ -4,12 +4,13 @@
 # barista image: https://www.vectorstock.com/royalty-free-vector/bearded-barista-man-icon-isometric-style-vector-30590888
 # waiter image: https://www.iconfinder.com/icons/6655714/barista_cartoon_girl_isometric_love_party_woman_icon
 # coffee machine image: https://www.vecteezy.com/vector-art/1983572-isometric-coffee-machine-illustrated-on-white-background
-# cup image: 
+# counter image: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Fpremium-vector%2Fcoffee-house-isometric-illustration-coffeeshop-counter-tables-with-chairs-isolated-clipart_10912455.htm&psig=AOvVaw27CZ0GuBOpJH4o8THG1Cgs&ust=1637440249975000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCPiCg7mipfQCFQAAAAAdAAAAABAP
 
 # import modules
 from cmu_112_graphics_openCV import *
 from classes import *
 import random
+import time
 
 '''''''''''''''''''''''''''''''''
 MODEL
@@ -22,16 +23,18 @@ def cafeDimensions():
     margin = 20
     return (rows, cols, cellSize, margin)
 
+
 '''''''''''''''''''''''''''''''''
 VIEW
 '''''''''''''''''''''''''''''''''
-# referenced from my HW6: tetris
+# SOURCE: my HW6 tetris
 
 # draw canvas
 def cafeMode_redrawAll(app, canvas):
     # draw cafe
     canvas.create_rectangle(0, 0, app.width, app.height, fill="lightblue", width=1)
     drawLayout(app, canvas)
+    canvas.create_rectangle(70, 170, 320, 520, outline = "pale green", width=1)
     # draw barista
     canvas.create_image(app.barista.x, app.barista.y, image=app.barista.img)
     # draw waiter
@@ -41,11 +44,12 @@ def cafeMode_redrawAll(app, canvas):
         canvas.create_image(app.currCustomer.x, app.currCustomer.y, image=app.currCustomer.img)
     # draw coffee machine
     canvas.create_image(app.cofMac.x, app.cofMac.y, image=app.cofMac.img)
+    # draw tables
+    for i in range(random.randint(1,5)):
+        canvas.create_image(app.table.x, app.table.y, image=app.table.img)
 
     if app.isOrdering:
         canvas.create_text(app.currCustomer.x, app.currCustomer.y + 10, text=app.currCustomer.order)
-
-    
 
 # draw grid of cafe
 def drawLayout(app, canvas):
@@ -63,70 +67,52 @@ def getCellBounds(app, row, col):
 
     return [x1,y1,x2,y2]
 
+# helper: get cell from coordinates
+def getRow(app, y):
+    row = int((y - app.margin) / app.cellSize)
+    return row
 
-# 2d to isometric
-# SOURCES:
-# https://gamedevelopment.tutsplus.com/tutorials/creating-isometric-worlds-primer-for-game-developers-updated--cms-28392
-# https://gamedevelopment.tutsplus.com/tutorials/updated-primer-for-creating-isometric-worlds-continued--cms-28503
-
-# def cartIso(app,cartX, cartY):
-#     isoX = (cartX - cartY) * app.cellSize/2
-#     isoY = (cartX + cartY)/2
-#     return isoX, isoY
-
-# def isoCart(isoX, isoY):
-#     cartX = (2*isoY + isoX)/2
-#     cartY = (2*isoY - isoX)/2
-#     return cartX, cartY
-
-#  def cartToIso(self, cartX, cartY, scalingFactor):
-#         cartX -= self.offsetX 
-#         cartY -= self.offsetY 
-#         cartX = cartX / scalingFactor
-#         cartY = cartY / scalingFactor 
-#         isoX = cartX - cartY
-#         isoY = (cartX + cartY) / 2
-#         return isoX, isoY
-
-#     def isoToCart(self, isoX, isoY, scalingFactor):
-#         cartX = (2 * isoY + isoX) / 2
-#         cartY = (2 * isoY - isoX) / 2
-#         cartX = cartX / scalingFactor
-#         cartY = cartY / scalingFactor
-#         cartX += offsetX 
-#         cartY += offsetY 
-#         return cartX, cartY 
-
-#     def setUpIsometric(self):
-#         #self.tileWidthHalf = self.tileWidth//2
-#         #self.tileHeightHalf = self.tileHeight//2
-#         self.offsetX = -1000
-#         self.offsetY = -270
-
-
-    
+def getCol(app, x):
+    col = int((x - app.margin) / app.cellSize)
+    return col
 '''''''''''''''''''''''''''''''''
 CONTROLLER
 '''''''''''''''''''''''''''''''''
 def cafeMode_timerFired(app):
-    # if app.isNewCustomer:
-    custImg = app.custImgs[random.randint(0, len(app.custImgs)-1)]
-    order = f"{app.orders[random.randint(0, len(app.orders)-1)]} with {app.bases[random.randint(0, len(app.bases)-1)]} milk, {app.arts[random.randint(0, len(app.arts)-1)]}"
-    # app.currOrder = [app.orders[ran]]
-    app.currCustomer = Customer("1", 0, 120, custImg, order)
-    app.customers.append(app.currCustomer)
-
-    # while app.currCustomer.x < app.barista.x - 10:
-    app.currCustomer.x += 10
-    # if app.currCustomer.x == app.barista.x - 10:
-    #     app.isOrdering = True
-    #     app.currCustomer.x = app.barista.x - 10
-    print(app.currCustomer.x)
-
+    app.board = [([app.emptyColor] * app.cols) for row in range(app.rows)]
+    app.board[getRow(app, app.barista.y)][getCol(app, app.barista.x)] = "blue"
+    app.board[getRow(app, app.waiter.y)][getCol(app, app.waiter.x)] = "orchid"
+    if app.isEntering:
+        app.currCustomer.x += 10
+        if app.currCustomer.x == app.barista.x - 50:
+            app.isEntering = False
+            app.isOrdering = True
+            time.sleep(3)
+        app.isOrdering = False
+        app.isWaiting = True
+    if app.isWaiting:
+        waitX = random.randint(70, 320)
+        waitY = random.randint(170, 520)
+        
+    
+        print(app.currCustomer.x)
+        print(app.customers)
+   
 # using arrow keys
 def cafeMode_keyPressed(app, event):
-    # toggle beetween characters
+    # accept customer order
     if event.key == "Space":
+        app.isOrdering = False
+        app.isEntering = True
+        custImg = app.custImgs[random.randint(0, len(app.custImgs)-1)]
+        drink = app.drinks[random.randint(0, len(app.drinks)-1)]
+        base = app.bases[random.randint(1, len(app.bases)-1)]
+        art = app.arts[random.randint(0, len(app.arts)-1)]
+        order = f"{drink} with {base} milk, {art}"
+        app.currCustomer = Customer("1", 0, 120, custImg, drink, base, art, order)
+   
+    # toggle beetween characters
+    if event.key == "b":
         app.activeChar = app.waiter if app.activeChar == app.barista else app.barista
     # using arrow keys to move
     if event.key == "Left":
@@ -167,4 +153,43 @@ def moveIsLegal(app):
 
 
 
+
+# 2d to isometric
+# SOURCES:
+# https://gamedevelopment.tutsplus.com/tutorials/creating-isometric-worlds-primer-for-game-developers-updated--cms-28392
+# https://gamedevelopment.tutsplus.com/tutorials/updated-primer-for-creating-isometric-worlds-continued--cms-28503
+
+# def cartIso(app,cartX, cartY):
+#     isoX = (cartX - cartY) * app.cellSize/2
+#     isoY = (cartX + cartY)/2
+#     return isoX, isoY
+
+# def isoCart(isoX, isoY):
+#     cartX = (2*isoY + isoX)/2
+#     cartY = (2*isoY - isoX)/2
+#     return cartX, cartY
+
+#  def cartToIso(self, cartX, cartY, scalingFactor):
+#         cartX -= self.offsetX 
+#         cartY -= self.offsetY 
+#         cartX = cartX / scalingFactor
+#         cartY = cartY / scalingFactor 
+#         isoX = cartX - cartY
+#         isoY = (cartX + cartY) / 2
+#         return isoX, isoY
+
+#     def isoToCart(self, isoX, isoY, scalingFactor):
+#         cartX = (2 * isoY + isoX) / 2
+#         cartY = (2 * isoY - isoX) / 2
+#         cartX = cartX / scalingFactor
+#         cartY = cartY / scalingFactor
+#         cartX += offsetX 
+#         cartY += offsetY 
+#         return cartX, cartY 
+
+#     def setUpIsometric(self):
+#         #self.tileWidthHalf = self.tileWidth//2
+#         #self.tileHeightHalf = self.tileHeight//2
+#         self.offsetX = -1000
+#         self.offsetY = -270
 
