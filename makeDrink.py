@@ -126,8 +126,8 @@ def makeDrinkMode_mousePressed(app, event):
     elif distance(x, y, app.width*0.1, app.height*0.92) < 30:
         app.mode = "cafeMode"
 
-def makeDrinkMode_keyPressed(app, event):
-    pass
+def makeDrinkMode_timerFired(app):
+    app.disp_cam = False
 
 
 

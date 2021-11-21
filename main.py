@@ -20,7 +20,7 @@ def appStarted(app):
     app.selectUser = tk.Entry()
     app.counter = 0
 
-    app.mode = 'cafeMode'
+    app.mode = 'makeDrinkMode'
     print(app.mode)
     app.cameraOpen = False
     app.disp_cam = False
@@ -76,6 +76,7 @@ def appStarted(app):
     app.currOrder = dict()
     app.drinkMade = dict()
     app.cupFull = False
+    app.resultImg = ""
     # app.flavors
 
     # miscellaneous
@@ -86,12 +87,14 @@ def appStarted(app):
 
     # openCV
     app.imgCanvas = np.zeros((200,200,3), np.uint8)
+    
 
     # scoring
     app.isCorrectBase = False
     app.isCorrectProportions = False
     app.score = 0
     app.cupScoreImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/cupscore.png"), 1/8))
+    app.heartImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/heart.png"), 1/4))
 
     # loading and saving into username
     # app.user = User()

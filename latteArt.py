@@ -6,7 +6,7 @@
 from cmu_112_graphics_openCV import *
 from classes import *
 from tkinter import *
-# from latte_drawing_copy import *
+from makeDrink import hexToRgb
 from handTrackingMod import *
 
 '''''''''''''''''''''''''''''''''
@@ -16,16 +16,14 @@ def latteArtMode_redrawAll(app, canvas):
     canvas.create_rectangle(0, 0, app.width, app.height, fill = "lavender")
     canvas.create_text(app.width/2, app.height/10, text="Time for latte art!", font="Baskerville 24")
     canvas.create_image(app.width*0.9, app.height*0.92, image=app.rightArrowImg)
-    canvas.create_image(app.width*0.1, app.height*0.92, image=app.leftArrowImg)
+    # canvas.create_image(app.width*0.1, app.height*0.92, image=app.leftArrowImg)
     canvas.create_image(app.width/2+10, app.height/2+20, image=app.cup)
     canvas.create_oval(app.width/2-app.currBase.r, app.height/2-app.currBase.r, app.width/2+app.currBase.r, app.height/2+app.currBase.r, fill=app.currBase.color)
-    # suggested func to render drawing onto coffee
-    canvas.create_image(app.width/2, app.height/2, image=app.imageToTk(app.imgCanvas))
-
     # show camera
     if app.disp_cam:
         resized = cv2.resize(app.frame, (640,360))
         cv2.imshow('Camera', resized)
+        canvas.create_image(app.width/2, app.height/2, image=app.imageToTk(app.imgCanvas))
 
 '''''''''''''''''''''''''''''''''
 CONTROLLER
@@ -35,9 +33,9 @@ def latteArtMode_mousePressed(app, event):
     x = event.x
     y = event.y
     print(distance(x, y, app.width*0.1, app.height*0.92))
-    if distance(x, y, app.width*0.1, app.height*0.92) < 30:
-       app.mode = "makeDrinkMode"
-    elif distance(x, y, app.width*0.9, app.height*0.92) < 30:
+    # if distance(x, y, app.width*0.1, app.height*0.92) < 30:
+    #    app.mode = "makeDrinkMode"
+    if distance(x, y, app.width*0.9, app.height*0.92) < 30:
        app.mode = "scoreMode"
    
 def latteArtMode_cameraFired(app):
@@ -110,13 +108,16 @@ def latteArtMode_cameraFired(app):
     # cv2.imshow("Canvas", imgCanvas) # show canvas of drawing
     
     #save file
-    # cv2.imwrite("Player drawing.jpg", imgCanvas)
-    cv2.waitKey(1) # 0 gives still images
+    cv2.imwrite("result.jpg", app.imgCanvas)
+    # cv2.waitKey(1) # 0 gives still images
     
 def latteArtMode_keyPressed(app, event):
     if event.key == "c":
+        app.imgCanvas = np.zeros((200,200,4), np.uint8) 
+        a,b,c = hexToRgb(app.currBase.color)
+        app.imgCanvas[:,:] = [c, b, a, 0]
+        print(app.imgCanvas[0][0])
         app.disp_cam = True
-        app.imgCanvas = np.zeros((200,200,3), np.uint8) # canvas needs to happen in 112 graphics
     if event.key == "q":
         # App._theRoot.app.quit()
         app.disp_cam = False
