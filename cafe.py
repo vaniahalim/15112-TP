@@ -87,16 +87,21 @@ def cafeMode_timerFired(app):
         if app.currCustomer.x == app.barista.x - 50:
             app.isEntering = False
             app.isOrdering = True
-            time.sleep(3)
-        app.isOrdering = False
-        app.isWaiting = True
-    if app.isWaiting:
-        waitX = random.randint(70, 320)
-        waitY = random.randint(170, 520)
-        
-    
         print(app.currCustomer.x)
         print(app.customers)
+
+    if app.isOrdering:
+        app.counter += app.timerDelay
+        if (app.timerDelay % 3 == 0):
+            app.isOrdering = False
+
+    # app.isWaiting = True
+    # if app.isWaiting:
+    #     waitX = random.randint(70, 320)
+    #     waitY = random.randint(170, 520)
+        
+    
+   
    
 # using arrow keys
 def cafeMode_keyPressed(app, event):

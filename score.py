@@ -15,23 +15,25 @@ def scoreMode_redrawAll(app, canvas):
     canvas.create_text(app.width/2, app.height/10, text="Judging...", font="Baskerville 24")
     canvas.create_image(app.width*0.9, app.height*0.92, image=app.rightArrowImg)
     canvas.create_image(app.width*0.1, app.height*0.92, image=app.leftArrowImg)
+    canvas.create_image(app.width*0.75, app.height*0.4, image=app.imageToTk(app.imgCanvas))
+
 
     # coffee results
-    canvas.create_img(app.currCustomer.)
+    # canvas.create_img(app.currCustomer.)
 
     # text 
-    canvas.create_text(app.width/4, app.height/8, text="Customer Order")
-    canvas.create_text(app.width*0.75, app.height/8, text="Your creation")
-    canvas.create_text(app.width/3, app.height*0.6, text="Ingredients......")
-    canvas.create_text(app.width/3, app.height*0.7, text="Proportions......")
+    canvas.create_text(app.width/4, app.height*0.2, text="Customer Order")
+    canvas.create_text(app.width*0.75, app.height*0.2, text="Your creation")
+    canvas.create_text(app.width/3, app.height*0.7, text="Ingredients......")
+    canvas.create_text(app.width/3, app.height*0.75, text="Proportions......")
     canvas.create_text(app.width/3, app.height*0.8, text="Art..............")
 
     # print scores
-    cupScoreImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/cupscore.png"), 1/8))
+    
     if app.isCorrectBase:
-        canvas.create_image(app.width*(2/3), app.height*0.6, image=cupScoreImg)
+        canvas.create_image(app.width*(2/3), app.height*0.6, image=app.cupScoreImg)
     if app.isCorrectProportions:
-        canvas.create_image(app.width*(2/3), app.height*0.7, image=cupScoreImg)
+        canvas.create_image(app.width*(2/3), app.height*0.7, image=app.cupScoreImg)
 
 # helper: draw customer order and your creation
 # def drawDrink(app, canvas):
@@ -73,7 +75,8 @@ def correctProportions(drinkMade, customer):
         if drinkMade != cortado:
             return False
     
-def scoreMode_timerFired(app, canvas):
+def scoreMode_timerFired(app):
+    app.disp_cam = False
     if correctBase(app.drinkMade, app.currCustomer): 
         app.isCorrectBase = True
         app.score += 1

@@ -6,6 +6,7 @@ from home import *
 from cafe import *
 from makeDrink import *
 from latteArt import *
+from score import *
 import tkinter as tk
 import pickle
 import random
@@ -17,9 +18,9 @@ MODEL
 def appStarted(app):
     app.username = ""
     app.selectUser = tk.Entry()
-    app.timerdelay = 10
+    app.counter = 0
 
-    app.mode = 'latteArtMode'
+    app.mode = 'cafeMode'
     print(app.mode)
     app.cameraOpen = False
     app.disp_cam = False
@@ -29,6 +30,15 @@ def appStarted(app):
     app.margin = 20
     app.emptyColor = "pink"
     app.board = [([app.emptyColor] * app.cols) for row in range(app.rows)]
+
+    # furniture
+    cofMacImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/cofmac.png"),1/10))
+    app.cofMac = Furniture("cofMac", 495, 245, cofMacImg)
+    app.board[getRow(app, app.cofMac.y)][getCol(app, app.cofMac.x)] = "blue"
+
+    tableImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/table.png"),1/10))
+    app.table = Furniture("table", random.randint(70, 170), random.randint(320, 520), tableImg)
+    # app.furniture = [cofMac]
    
     # characters
     baristaImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/barista.png"),1/10))
@@ -66,17 +76,7 @@ def appStarted(app):
     app.currOrder = dict()
     app.drinkMade = dict()
     app.cupFull = False
-
     # app.flavors
-
-    # furniture
-    cofMacImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/cofmac.png"),1/10))
-    app.cofMac = Furniture("cofMac", 495, 245, cofMacImg)
-    app.board[getRow(app, app.cofMac.y)][getCol(app, app.cofMac.x)] = "blue"
-
-    tableImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/table.png"),1/10))
-    app.table = Furniture("table", random.randint(70, 170), random.randint(320, 520), tableImg)
-    # app.furniture = [cofMac]
 
     # miscellaneous
     app.rightArrowImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/rightarrow.png"), 1/2))
@@ -91,6 +91,7 @@ def appStarted(app):
     app.isCorrectBase = False
     app.isCorrectProportions = False
     app.score = 0
+    app.cupScoreImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/cupscore.png"), 1/8))
 
     # loading and saving into username
     # app.user = User()

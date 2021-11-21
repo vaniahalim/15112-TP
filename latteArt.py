@@ -24,7 +24,8 @@ def latteArtMode_redrawAll(app, canvas):
 
     # show camera
     if app.disp_cam:
-        cv2.imshow('Camera', app.frame)
+        resized = cv2.resize(app.frame, (640,360))
+        cv2.imshow('Camera', resized)
 
 '''''''''''''''''''''''''''''''''
 CONTROLLER
@@ -36,14 +37,15 @@ def latteArtMode_mousePressed(app, event):
     print(distance(x, y, app.width*0.1, app.height*0.92))
     if distance(x, y, app.width*0.1, app.height*0.92) < 30:
        app.mode = "makeDrinkMode"
+    elif distance(x, y, app.width*0.9, app.height*0.92) < 30:
+       app.mode = "scoreMode"
    
 def latteArtMode_cameraFired(app):
     # mirror image
     app.frame = cv2.flip(app.frame, 1)
-
     # painter config
     drawColor = ()
-    brushThickness = 20
+    brushThickness = 15
 
     # open camera
     # change resolution
@@ -64,9 +66,8 @@ def latteArtMode_cameraFired(app):
     lmList = detector.findPosition(img,0) # get landmark positions
 
     if len(lmList) != 0: # if landmark on screen
-        print(lmList[8]) # int based on which landmark you want -> prints pos of that landmark
-        print(lmList[8][1:])
         x_index, y_index = lmList[8][1:] # x,y coordinates of finger
+        print(lmList[8][1:])
         x_mid, y_mid = lmList[12][1:]
 
         # check which fingers are up
@@ -91,11 +92,13 @@ def latteArtMode_cameraFired(app):
                 x_prev, y_prev = x_index, y_index
 
             cv2.line(img, (x_prev, y_prev), (x_index, y_index), drawColor, brushThickness) # camera detection
-            cv2.line(app.imgCanvas, (x_prev, y_prev), (x_index, y_index), drawColor, brushThickness) # draws onto a separate canvas created
+            cv2.line(app.imgCanvas, (x_prev-540, y_prev-260), (x_index-540, y_index-260), drawColor, brushThickness) # draws onto a separate canvas created
     
         x_prev, y_prev = x_index, y_index # keep updating position of fingers
 
     cv2.putText(img, "Draw here!", (30,100), cv2.FONT_HERSHEY_PLAIN, 3, (255,0,255), 3)
+    cv2.circle(img, (640, 360), 300, (0, 0, 0), 2)
+    print
     
     # remove prev picture
     # try: 
@@ -108,13 +111,14 @@ def latteArtMode_cameraFired(app):
     
     #save file
     # cv2.imwrite("Player drawing.jpg", imgCanvas)
-    # cv2.waitKey(1) # 0 gives still images
+    cv2.waitKey(1) # 0 gives still images
     
 def latteArtMode_keyPressed(app, event):
     if event.key == "c":
         app.disp_cam = True
         app.imgCanvas = np.zeros((200,200,3), np.uint8) # canvas needs to happen in 112 graphics
     if event.key == "q":
-        App._theRoot.app.quit()
+        # App._theRoot.app.quit()
+        app.disp_cam = False
 
 
