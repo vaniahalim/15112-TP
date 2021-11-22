@@ -59,10 +59,6 @@ def makeDrinkMode_mousePressed(app, event):
     x = event.x
     y = event.y
    
-    print(app.currBase.name)
-    print(app.currBase.r)
-    print(app.drinkMade)
-
     # select bases
     if distance(x, y, app.width * (0.1), app.height * 0.15) < 26:
         if not app.cupFull:
@@ -112,7 +108,7 @@ def makeDrinkMode_mousePressed(app, event):
     elif distance(x, y, app.width * (0.1), app.height * 0.75) < 26:
         if not app.cupFull:
             app.foam.r += 10
-            app.currBase.color = app.foam.color
+            app.currBase.color = combineColors(app, app.currBase, app.foam)
             app.currBase.r += 10
             app.drinkMade[app.foam.name] = app.foam.r
         if app.currBase.r == 150:
@@ -125,6 +121,9 @@ def makeDrinkMode_mousePressed(app, event):
     # button to go to cafe page
     elif distance(x, y, app.width*0.1, app.height*0.92) < 30:
         app.mode = "cafeMode"
+
+    print(app.currBase)
+    print(app.drinkMade)
 
 def makeDrinkMode_timerFired(app):
     app.disp_cam = False

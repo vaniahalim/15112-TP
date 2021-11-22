@@ -15,10 +15,11 @@ VIEW
 def latteArtMode_redrawAll(app, canvas):
     canvas.create_rectangle(0, 0, app.width, app.height, fill = "lavender")
     canvas.create_text(app.width/2, app.height/10, text="Time for latte art!", font="Baskerville 24")
+    canvas.create_text(app.width/2, app.height*0.15, text="Press c to start drawing", font="Baskerville 20")
     canvas.create_image(app.width*0.9, app.height*0.92, image=app.rightArrowImg)
     # canvas.create_image(app.width*0.1, app.height*0.92, image=app.leftArrowImg)
     canvas.create_image(app.width/2+10, app.height/2+20, image=app.cup)
-    canvas.create_oval(app.width/2-app.currBase.r, app.height/2-app.currBase.r, app.width/2+app.currBase.r, app.height/2+app.currBase.r, fill=app.currBase.color)
+    canvas.create_oval(app.width/2-app.currBase.r, app.height/2-app.currBase.r, app.width/2+app.currBase.r, app.height/2+app.currBase.r, fill=app.currBase.color, width=0)
     # show camera
     if app.disp_cam:
         resized = cv2.resize(app.frame, (640,360))
@@ -36,7 +37,10 @@ def latteArtMode_mousePressed(app, event):
     # if distance(x, y, app.width*0.1, app.height*0.92) < 30:
     #    app.mode = "makeDrinkMode"
     if distance(x, y, app.width*0.9, app.height*0.92) < 30:
-       app.mode = "scoreMode"
+       app.mode = "cafeMode"
+       app.isServing = True
+       app.activeChar = app.waiter
+       app.disp_cam = False
    
 def latteArtMode_cameraFired(app):
     # mirror image
