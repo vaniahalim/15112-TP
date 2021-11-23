@@ -22,7 +22,7 @@ def appStarted(app):
     app.counter = 0
     app.day = 1
 
-    app.mode = 'homeMode'
+    app.mode = 'cafeMode'
     print(app.mode)
     app.cameraOpen = False
     app.disp_cam = False
@@ -37,6 +37,7 @@ def appStarted(app):
     app.win = False
     app.time = 0
     app.timeOver = False
+    app.isStarting = True
 
     # miscellaneous
     app.rightArrowImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/rightarrow.png"), 1/2))
@@ -48,10 +49,9 @@ def appStarted(app):
     # furniture
     cofMacImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/cofmac.png"),1/10))
     app.cofMac = Furniture("cofMac", 495, 245, cofMacImg)
-    app.boardGrid[getRow(app, app.cofMac.y)][getCol(app, app.cofMac.x)] = 1
+    app.closeCofMac = False
     tableImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/table.png"),1/10))
     app.table = Furniture("table", 95+50*random.randint(0, 4), 95+50*random.randint(2, 8), tableImg)
-    # app.furniture = [cofMac]
    
     # characters
     baristaImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/barista.png"),1/10))

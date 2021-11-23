@@ -79,7 +79,6 @@ def correctProportions(app, drinkMade, customer):
     cortado = {"espresso": 50, "foam": 50}
     if customer.drink == "Latte":
         app.drinkOrder = latte
-        # app.drinkColor = 
         if drinkMade != latte:
             return False
     if customer.drink == "Macchiato":
@@ -105,7 +104,7 @@ def artScoring(app):
         orderedArt = cv2.imread("images/heart.png")
         app.artOrdered = app.heartImg
     elif app.currCustomer.art == "flower":
-        orderedArt = cv2.imrad("images/flower.png")
+        orderedArt = cv2.imread("images/flower.png")
         app.artOrdered = app.flowerImg
 
     resultArt = cv2.imread("result.jpg")
@@ -134,27 +133,40 @@ def getProportions(app):
     pass
 
 def scoreMode_timerFired(app):
-    app.waiter.x, app.waiter.y == 395, 395
-    app.currCustomer == None
+    # app.currCustomer = None
     app.resultImg = ImageTk.PhotoImage(app.loadImage("result.jpg"))
     app.disp_cam = False
     app.artScore = artScoring(app)
-
+    
     if correctBase(app.drinkMade, app.currCustomer): 
         app.isCorrectBase = True
-        app.score += 1
     if correctProportions(app, app.drinkMade, app.currCustomer):
         app.isCorrectProportions = True
-        app.score += 1
-    if app.artScore >= 0.4:
-        app.score += 1
-    if app.score == app.winScore:
-        app.win == True
-
+   
 def scoreMode_mousePressed(app, event):
     x = event.x
     y = event.y
     if distance(x, y, app.width*0.92, app.height*0.92) < 30:
-        print(app.mode)
+        app.waiter.x = 395
+        app.waiter.y = 395
+        app.isServing = False
+        app.activeChar = app.barista
+
+        # increase score count
+        if correctBase(app.drinkMade, app.currCustomer): 
+            app.score += 1
+        if correctProportions(app, app.drinkMade, app.currCustomer):
+            app.score += 1
+        if app.artScore >= 0.4:
+            app.score += 1
+        if app.score >= app.winScore:
+            app.win = True
+
+        # create new cup
+        app.currBase = Base("empty", "#FFFFFF", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/coffebeans.png"),1/10)))
+
         app.mode = "cafeMode"
-        print(app.mode)
+        app.isStarting = True
+        
+    
+    

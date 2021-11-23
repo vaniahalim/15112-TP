@@ -37,12 +37,11 @@ def cafeMode_redrawAll(app, canvas):
     # draw cafe grid
     canvas.create_rectangle(0, 0, app.width, app.height, fill="lightblue", width=1)
     drawLayout(app, canvas)
-    canvas.create_rectangle(70, 170, 320, 520, outline = "pale green", width=1)
     # draw score progress bar 
-    canvas.create_rectangle(app.width/2 - 100, 590, app.width/2 + 100, 620, fill="grey", width=0.5)
-    canvas.create_text(app.width/2, 605, text="Progress...")
+    canvas.create_rectangle(app.width/2 - 100, 590, app.width/2 + 100, 620, fill="lightgrey", width=0.5)
     if not app.win and not app.timeOver:
         canvas.create_rectangle(app.width/2 - 100, 590, app.width/2-100+(app.score/app.winScore)*200, 620, fill="pink")
+    canvas.create_text(app.width/2, 605, text="Progress...")
     # draw timer
     canvas.create_image(605, app.height/2, image=app.timerImg)
     if not app.timeOver:
@@ -59,16 +58,22 @@ def cafeMode_redrawAll(app, canvas):
         canvas.create_image(app.currCustomer.x, app.currCustomer.y, image=app.currCustomer.img)
     # draw coffee machine
     canvas.create_image(app.cofMac.x, app.cofMac.y, image=app.cofMac.img)
+    if app.closeCofMac:
+        canvas.create_text(app.width/2, 35, text="Press enter to make drinks!")
     # draw tables
-    for i in range(random.randint(1,5)):
+    for i in range(0, random.randint(1,5)):
         canvas.create_image(app.table.x, app.table.y, image=app.table.img)
+
+    # draw order text
     if app.isOrdering:
         canvas.create_text(app.width/2, 35, text=app.currCustomer.order)
+    if app.isStarting:
+        canvas.create_text(app.width/2, 35, text="Press space to accept orders!")
 
     # draw path
     if app.isServing:
         for p in app.path:
-            canvas.create_oval(p[0]-5,p[1]-5,p[0]+5,p[1]+5)
+            canvas.create_oval(p[0]-5,p[1]-5,p[0]+5,p[1]+5, fill="green")
 
 # draw grid of cafe
 def drawLayout(app, canvas):
@@ -99,29 +104,50 @@ def getCol(app, x):
 CONTROLLER
 '''''''''''''''''''''''''''''''''
 def cafeMode_timerFired(app):
-    # if app.time == 400: 
-    #     app.timeOver
-    #     app.mode = "endMode"
-    #     app.day += 1
-    app.time += 0.1
+    # set up board
     app.board = [([app.emptyColor] * app.cols) for row in range(app.rows)]
-    app.boardGrid[getRow(app, app.cofMac.y)][getCol(app, app.cofMac.x)] == 1
+    app.boardGrid = [([0] * app.cols) for row in range(app.rows)]
+    app.boardGrid[getRow(app, app.cofMac.y)][getCol(app, app.cofMac.x)] = 1
+    app.boardGrid[getRow(app, app.table.y)][getCol(app, app.table.x)] = 1
     app.board[getRow(app, app.barista.y)][getCol(app, app.barista.x)] = "blue"
+    app.boardGrid[getRow(app, app.barista.y)][getCol(app, app.barista.x)] = 1
     app.board[getRow(app, app.waiter.y)][getCol(app, app.waiter.x)] = "orchid"
+
+    # indicate position on board as filled
+    if app.currCustomer != None:
+        app.boardGrid[getRow(app, app.currCustomer.y)][getCol(app, app.currCustomer.x)] = 1
+
+    # countdown timer to end of day
+    if app.time == 400: 
+        app.timeOver
+        app.mode = "endMode"
+        app.day += 1
+    app.time += 0.5
+
+    # show instruction to go to makeDrinkMode
+    if distance(app.activeChar.x, app.activeChar.y, app.cofMac.x, app.cofMac.y) <= 50:
+        app.closeCofMac = True
+    elif distance(app.activeChar.x, app.activeChar.y, app.cofMac.x, app.cofMac.y) > 50:
+        app.closeCofMac = False
+
+    # customer enters
     if app.isEntering:
-        app.currCustomer.x += 5
-        if app.currCustomer.x == app.barista.x - 50:
+        app.currCustomer.x += 10
+        if app.currCustomer.x >= app.barista.x - 50:
             app.isEntering = False
             app.isOrdering = True
+    # show order 
     if app.isOrdering:
         app.counter += app.timerDelay
         if (app.counter % 300 == 0):
             app.isOrdering = False
             app.isWaiting = True
+    # barista serving drink to customer
     if app.isServing:
-        app.barista.x, app.barista.y == 395, 145
+        app.barista.x, app.barista.y = 395, 145
+        startPos = (app.waiter.x, app.waiter.y)
         targetPos = (app.currCustomer.x, app.currCustomer.y)
-        app.path = pathfinding(app, (395,395), targetPos)
+        app.path = pathfinding(app, startPos, targetPos)
         print(app.path)
         if app.waiter.x == app.currCustomer.x and app.waiter.y == app.currCustomer.y:
             app.mode = "scoreMode"
@@ -130,6 +156,7 @@ def cafeMode_timerFired(app):
 def cafeMode_keyPressed(app, event):
     # accept customer order
     if event.key == "Space":
+        app.isStarting = False
         app.isOrdering = False
         app.isEntering = True
         custImg = app.custImgs[random.randint(0, len(app.custImgs)-1)]
@@ -159,13 +186,20 @@ def cafeMode_keyPressed(app, event):
     # switch to makedrink mode
     elif distance(app.activeChar.x, app.activeChar.y, app.cofMac.x, app.cofMac.y) <= 50:
         if event.key == "Return" or event.key == "Enter":
-            print("close")
             app.mode = "makeDrinkMode"
-            app.currCustomer.x = 95+50*random.randint(0, 4)
-            app.currCustomer.y = 95+50*random.randint(2, 8)
+            app.currCustomer.x, app.currCustomer.y = getRandPos(app)
 
+# helper: recursive function to get random available position for customer to stand at
+def getRandPos(app):
+    randX = 95+50*random.randint(0, 4)
+    randY = 95+50*random.randint(2, 8)
+    print (randX, randY)
+    if app.boardGrid[getRow(app, randY)][getCol(app, randX)] == 0:
+        return randX, randY
+    else:
+        return getRandPos(app)
     
-# helper fn: move characters
+# helper: move characters
 def moveChar(app, drow, dcol):
     drow *= 50
     dcol *= 50
@@ -201,7 +235,6 @@ def pathfinding(app, start, end):
     while len(open_list) > 0:
         # Get the current node
         current_node = open_list[0]
-        print(current_node.position)
         current_index = 0
         for index, item in enumerate(open_list):
             if item.cost < current_node.cost:

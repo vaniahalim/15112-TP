@@ -9,7 +9,7 @@ VIEW
 '''''''''''''''''''''''''''''''''
 def homeMode_redrawAll(app, canvas):
     canvas.create_rectangle(0, 0, app.width, app.height, fill = "pink")
-    canvas.create_text(app.width/2, app.height*0.4, text=f"It's day{app.day}! Welcome to...", font="Avenir 28")
+    canvas.create_text(app.width/2, app.height*0.4, text=f"It's day {app.day}! Welcome to...", font="Avenir 28")
     canvas.create_text(app.width/2, app.height/2, text="LA BARISTA", font="Baskerville 48")
     canvas.create_rectangle(app.width/2-app.width/5, app.height/1.5-app.height/20, app.width/2+app.width/5, app.height/1.5+app.height/20, fill='lightblue')
     canvas.create_text(app.width/2, app.height/1.5, text="PLAY", font="Avenir 28" )

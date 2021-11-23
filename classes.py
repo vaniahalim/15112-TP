@@ -28,8 +28,6 @@ class Customer(object):
     def __init__(self, name, x, y, img, drink, base, art, order):
         self.name = name
         self.x = x
-        self.targetx = 0
-        self.targety = 0
         self.y = y
         self.drink = drink
         self.base = base

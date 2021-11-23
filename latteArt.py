@@ -15,7 +15,8 @@ VIEW
 def latteArtMode_redrawAll(app, canvas):
     canvas.create_rectangle(0, 0, app.width, app.height, fill = "lavender")
     canvas.create_text(app.width/2, app.height/10, text="Time for latte art!", font="Baskerville 24")
-    canvas.create_text(app.width/2, app.height*0.15, text="Press c to start drawing", font="Baskerville 20")
+    canvas.create_text(app.width/2, app.height*0.15, text="Press c to start pouring! Tip: pour slowly...", font="Avenir 20")
+    canvas.create_text(app.width/2, app.height*0.2, text="Use index finger to pour; Raise 2 or more fingers to stop", font="Avenir 16")
     canvas.create_image(app.width*0.9, app.height*0.92, image=app.rightArrowImg)
     # canvas.create_image(app.width*0.1, app.height*0.92, image=app.leftArrowImg)
     canvas.create_image(app.width/2+10, app.height/2+20, image=app.cup)
@@ -37,10 +38,12 @@ def latteArtMode_mousePressed(app, event):
     # if distance(x, y, app.width*0.1, app.height*0.92) < 30:
     #    app.mode = "makeDrinkMode"
     if distance(x, y, app.width*0.9, app.height*0.92) < 30:
-       app.mode = "cafeMode"
-       app.isServing = True
-       app.activeChar = app.waiter
-       app.disp_cam = False
+        app.mode = "cafeMode"
+        app.isServing = True
+        app.activeChar = app.waiter
+        # app.camera.release()
+        app.disp_cam = False
+      
    
 def latteArtMode_cameraFired(app):
     # mirror image
@@ -122,8 +125,5 @@ def latteArtMode_keyPressed(app, event):
         app.imgCanvas[:,:] = [c, b, a, 0]
         print(app.imgCanvas[0][0])
         app.disp_cam = True
-    if event.key == "q":
-        # App._theRoot.app.quit()
-        app.disp_cam = False
 
 

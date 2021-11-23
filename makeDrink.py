@@ -59,7 +59,7 @@ def makeDrinkMode_mousePressed(app, event):
     x = event.x
     y = event.y
    
-    # select bases
+    # select bases, stop if cup is full
     if distance(x, y, app.width * (0.1), app.height * 0.15) < 26:
         if not app.cupFull:
             app.espresso.r += 10
@@ -125,8 +125,8 @@ def makeDrinkMode_mousePressed(app, event):
     print(app.currBase)
     print(app.drinkMade)
 
-def makeDrinkMode_timerFired(app):
-    app.disp_cam = False
+# def makeDrinkMode_timerFired(app):
+#     app.disp_cam = False
 
 
 
