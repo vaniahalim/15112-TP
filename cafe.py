@@ -5,8 +5,12 @@
 # waiter image: https://www.iconfinder.com/icons/6655714/barista_cartoon_girl_isometric_love_party_woman_icon
 # coffee machine image: https://www.vecteezy.com/vector-art/1983572-isometric-coffee-machine-illustrated-on-white-background
 # counter image: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Fpremium-vector%2Fcoffee-house-isometric-illustration-coffeeshop-counter-tables-with-chairs-isolated-clipart_10912455.htm&psig=AOvVaw27CZ0GuBOpJH4o8THG1Cgs&ust=1637440249975000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCPiCg7mipfQCFQAAAAAdAAAAABAP
+# table image: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vectorstock.com%2Froyalty-free-vector%2Fwood-table-icon-isometric-style-vector-27067678&psig=AOvVaw1FrR5KlcPIY6L6suhatLl-&ust=1637722650771000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCNiRxsG_rfQCFQAAAAAdAAAAABAS
 # sun image: https://www.flaticon.com/packs/nature-92
 # moon image: https://www.flaticon.com/premium-icon/moon_1888300?related_id=1888300&origin=pack
+# timer image: https://www.google.com/imgres?imgurl=https%3A%2F%2Fwww.xmple.com%2Fwallpaper%2Forange-blue-gradient-linear-1920x1080-c2-0000cd-ff8c00-a-45-f-14.svg&imgrefurl=https%3A%2F%2Fwww.xmple.com%2Fwallpaper%2Forange-blue-gradient-linear--c2-0000cd-ff8c00-a-45-f-14-image%2F&tbnid=Bn41Fc6ZA9X_JM&vet=12ahUKEwjag47pv630AhWLBc0KHW1cAkoQMygOegUIARDyAQ..i&docid=CCYxh7MBUtbZdM&w=1920&h=1080&itg=1&q=orange%20blue%20gradient&ved=2ahUKEwjag47pv630AhWLBc0KHW1cAkoQMygOegUIARDyAQ
+# people images: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.dreamstime.com%2Fcreative-pack-isometric-people-flat-icons-providing-awesome-features-human-avatars-performing-various-activities-image125598730&psig=AOvVaw2gdVQ-_yHhfKPwtFq5cX0K&ust=1637723158290000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCJjx9KvArfQCFQAAAAAdAAAAABAD
+
 # pathfinding: https://medium.com/@nicholas.w.swift/easy-a-star-pathfinding-7e6689c7f7b2
 
 # import modules

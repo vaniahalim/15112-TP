@@ -1,5 +1,8 @@
 # main file to run animation
 # import all files
+
+# SOURCE NOTES: images are cited on the first screen they are used in
+
 from cmu_112_graphics_openCV import *
 from classes import *
 from home import *
@@ -22,7 +25,7 @@ def appStarted(app):
     app.counter = 0
     app.day = 1
 
-    app.mode = 'cafeMode'
+    app.mode = 'homeMode'
     print(app.mode)
     app.cameraOpen = False
     app.disp_cam = False

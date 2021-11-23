@@ -1,6 +1,6 @@
 # SCREEN: makeDrinkMode
 # SOURCES:
-# button: https://www.customicondesign.com/free-icons/flat-cute-icon-set/flat-cute-icon-set-part-arrow/
+# arrows: https://www.customicondesign.com/free-icons/flat-cute-icon-set/flat-cute-icon-set-part-arrow/
 # coffee cup: https://www.istockphoto.com/photos/empty-coffee-cup-top-view
 # coffee beans: "https://www.flaticon.com/premium-icon/coffee-beans_3219333?term=coffee%20bean&page=1&position=13&page=1&position=13&related_id=3219333&origin=search"
 # dairy milk: https://www.flaticon.com/authors/amonrat-rungreangfangsai"
@@ -8,7 +8,6 @@
 # soy milk: "https://www.flaticon.com/premium-icon/soy-milk_3414349?term=soy%20milk&related_id=3414349"
 # almond milk: " https://www.flaticon.com/premium-icon/almond-milk_3414348?term=almond%20milk&page=1&position=48&page=1&position=48&related_id=3414348&origin=search"
 # milk foam: "https://www.flaticon.com/free-icon/streamer_2766658?term=milk%20foam&page=1&position=51&page=1&position=51&related_id=2766658&origin=search"
-
 
 # import modules
 from cmu_112_graphics_openCV import *

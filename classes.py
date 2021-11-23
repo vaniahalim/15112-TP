@@ -35,7 +35,7 @@ class Customer(object):
         self.img = img
         self.order = order
 
-# pathfinding
+# pathfinding: https://medium.com/@nicholas.w.swift/easy-a-star-pathfinding-7e6689c7f7b2
 class Node():
     def __init__(self, parent, position):
         self.parent = parent
