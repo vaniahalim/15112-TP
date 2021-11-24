@@ -8,6 +8,9 @@
 # soy milk: "https://www.flaticon.com/premium-icon/soy-milk_3414349?term=soy%20milk&related_id=3414349"
 # almond milk: " https://www.flaticon.com/premium-icon/almond-milk_3414348?term=almond%20milk&page=1&position=48&page=1&position=48&related_id=3414348&origin=search"
 # milk foam: "https://www.flaticon.com/free-icon/streamer_2766658?term=milk%20foam&page=1&position=51&page=1&position=51&related_id=2766658&origin=search"
+# matcha: "https://www.flaticon.com/free-icon/matcha_2362778?term=matcha&page=1&position=6&page=1&position=6&related_id=2362778&origin=search"
+# mocha: https://www.flaticon.com/free-icon/chocolate_3465221?term=chocolate&page=1&position=10&page=1&position=10&related_id=3465221
+# chai: https://www.flaticon.com/premium-icon/chai-tea_1491806?term=chai&page=1&position=2&page=1&position=2&related_id=1491806&origin=search
 
 # import modules
 from cmu_112_graphics_openCV import *
@@ -19,7 +22,9 @@ VIEW
 '''''''''''''''''''''''''''''''''
 def makeDrinkMode_redrawAll(app, canvas):
     canvas.create_rectangle(0, 0, app.width, app.height, fill = "lavender")
-    canvas.create_text(app.width/2, app.height/10, text="Choose a flavour", font="Baskerville 24")
+    canvas.create_text(app.width/2, app.height/10, text="Pour Ingredients!", font="Baskerville 24")
+    canvas.create_text(app.width/2, app.height*0.15, text="Click on ingredients to pour into cup", font="Avenir 18")
+    canvas.create_text(app.width/2, app.height*0.85, text="Tip: recall each order's ingredients and proportions", font="Avenir 16")
     canvas.create_image(app.width*0.9, app.height*0.92, image=app.rightArrowImg)
     canvas.create_image(app.width*0.1, app.height*0.92, image=app.leftArrowImg)
 
@@ -31,6 +36,17 @@ def makeDrinkMode_redrawAll(app, canvas):
     canvas.create_image(app.width * (0.1), app.height * 0.51, image=app.soy.img)
     canvas.create_image(app.width * (0.1), app.height * 0.63, image=app.almond.img)
     canvas.create_image(app.width * (0.1), app.height * 0.75, image=app.foam.img)
+
+    # add matcha
+    if app.drinksShown >= 5:
+        canvas.create_image(app.width * (0.9), app.height * 0.15, image=app.matcha.img)
+    # add mocha
+    if app.drinksShown >= 6:
+        canvas.create_image(app.width * (0.9), app.height * 0.27, image=app.mocha.img)
+    # add chai
+    if app.drinksShown >= 7:
+        canvas.create_image(app.width * (0.9), app.height * 0.39, image=app.chai.img)
+    
     canvas.create_oval(app.width/2-app.currBase.r, app.height/2-app.currBase.r, app.width/2+app.currBase.r, app.height/2+app.currBase.r, fill=app.currBase.color, width=0)
 
 '''''''''''''''''''''''''''''''''
@@ -112,6 +128,33 @@ def makeDrinkMode_mousePressed(app, event):
             app.drinkMade[app.foam.name] = app.foam.r
         if app.currBase.r == 150:
             app.cupFull = True
+    
+    elif distance(x, y, app.width * (0.9), app.height * 0.15) < 26:
+        if not app.cupFull:
+            app.matcha.r += 10
+            app.currBase.color = combineColors(app, app.currBase, app.matcha)
+            app.currBase.r += 10
+            app.drinkMade[app.matcha.name] = app.matcha.r
+        if app.currBase.r == 150:
+            app.cupFull = True
+    
+    elif distance(x, y, app.width * (0.9), app.height * 0.27) < 26:
+        if not app.cupFull:
+            app.mocha.r += 10
+            app.currBase.color = combineColors(app, app.currBase, app.mocha)
+            app.currBase.r += 10
+            app.drinkMade[app.mocha.name] = app.mocha.r
+        if app.currBase.r == 150:
+            app.cupFull = True
+
+    elif distance(x, y, app.width * (0.9), app.height * 0.39) < 26:
+        if not app.cupFull:
+            app.chai.r += 10
+            app.currBase.color = combineColors(app, app.currBase, app.chai)
+            app.currBase.r += 10
+            app.drinkMade[app.chai.name] = app.chai.r
+        if app.currBase.r == 150:
+            app.cupFull = True
 
     # button to go to latte art page
     elif distance(x, y, app.width*0.92, app.height*0.92) < 30:
@@ -124,8 +167,11 @@ def makeDrinkMode_mousePressed(app, event):
     print(app.currBase)
     print(app.drinkMade)
 
-# def makeDrinkMode_timerFired(app):
-#     app.disp_cam = False
+def makeDrinkMode_timerFired(app):
+    if app.time >= app.gameTime: 
+        app.timeOver
+        app.mode = "endMode"
+    app.time += 1
 
 
 

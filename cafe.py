@@ -10,6 +10,8 @@
 # moon image: https://www.flaticon.com/premium-icon/moon_1888300?related_id=1888300&origin=pack
 # timer image: https://www.google.com/imgres?imgurl=https%3A%2F%2Fwww.xmple.com%2Fwallpaper%2Forange-blue-gradient-linear-1920x1080-c2-0000cd-ff8c00-a-45-f-14.svg&imgrefurl=https%3A%2F%2Fwww.xmple.com%2Fwallpaper%2Forange-blue-gradient-linear--c2-0000cd-ff8c00-a-45-f-14-image%2F&tbnid=Bn41Fc6ZA9X_JM&vet=12ahUKEwjag47pv630AhWLBc0KHW1cAkoQMygOegUIARDyAQ..i&docid=CCYxh7MBUtbZdM&w=1920&h=1080&itg=1&q=orange%20blue%20gradient&ved=2ahUKEwjag47pv630AhWLBc0KHW1cAkoQMygOegUIARDyAQ
 # people images: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.dreamstime.com%2Fcreative-pack-isometric-people-flat-icons-providing-awesome-features-human-avatars-performing-various-activities-image125598730&psig=AOvVaw2gdVQ-_yHhfKPwtFq5cX0K&ust=1637723158290000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCJjx9KvArfQCFQAAAAAdAAAAABAD
+# help image: https://www.flaticon.com/premium-icon/help_2550424?term=help%20button&page=1&position=80&page=1&position=80&related_id=2550424&origin=search
+# menu image: https://www.flaticon.com/premium-icon/help_2550424?term=help%20button&page=1&position=80&page=1&position=80&related_id=2550424&origin=search
 
 # pathfinding: https://medium.com/@nicholas.w.swift/easy-a-star-pathfinding-7e6689c7f7b2
 
@@ -41,6 +43,10 @@ def cafeMode_redrawAll(app, canvas):
     # draw cafe grid
     canvas.create_rectangle(0, 0, app.width, app.height, fill="lightblue", width=1)
     drawLayout(app, canvas)
+    # draw menu
+    canvas.create_image(app.menu.x, app.menu.y, image=app.menu.img)
+    # draw instructions 
+    canvas.create_image(605, 35, image=app.helpImg)
     # draw score progress bar 
     canvas.create_rectangle(app.width/2 - 100, 590, app.width/2 + 100, 620, fill="lightgrey", width=0.5)
     if not app.win and not app.timeOver:
@@ -49,9 +55,10 @@ def cafeMode_redrawAll(app, canvas):
     # draw timer
     canvas.create_image(605, app.height/2, image=app.timerImg)
     if not app.timeOver:
-        canvas.create_line(590,170+(app.time),620,170+(app.time), fill="lightblue", width=2)
+        canvas.create_line(590,120+(app.time/app.gameTime)*400,620,120+(app.time/app.gameTime)*400, fill="lightblue", width=2)
     canvas.create_image(605, 95, image=app.sunImg)
     canvas.create_image(605, 545, image=app.moonImg)
+    
 
     # draw barista
     canvas.create_image(app.barista.x, app.barista.y, image=app.barista.img)
@@ -112,21 +119,44 @@ def cafeMode_timerFired(app):
     app.board = [([app.emptyColor] * app.cols) for row in range(app.rows)]
     app.boardGrid = [([0] * app.cols) for row in range(app.rows)]
     app.boardGrid[getRow(app, app.cofMac.y)][getCol(app, app.cofMac.x)] = 1
-    app.boardGrid[getRow(app, app.table.y)][getCol(app, app.table.x)] = 1
+    app.boardGrid[getRow(app, app.table.y-25)][getCol(app, app.table.x-25)] = 1
     app.board[getRow(app, app.barista.y)][getCol(app, app.barista.x)] = "blue"
     app.boardGrid[getRow(app, app.barista.y)][getCol(app, app.barista.x)] = 1
     app.board[getRow(app, app.waiter.y)][getCol(app, app.waiter.x)] = "orchid"
+    app.boardGrid[getRow(app, app.waiter.y)][getCol(app, app.waiter.x)] = 1
 
     # indicate position on board as filled
     if app.currCustomer != None:
         app.boardGrid[getRow(app, app.currCustomer.y)][getCol(app, app.currCustomer.x)] = 1
 
-    # countdown timer to end of day
-    if app.time == 400: 
+    # end of day
+    if app.time >= app.gameTime: 
         app.timeOver
         app.mode = "endMode"
-        app.day += 1
-    app.time += 0.5
+
+    # modify difficulty of game:
+    if app.time > 0 and app.time % 1000 == 0:
+        checkDifficulty(app)
+        print(app.time)
+        print(app.difficulty)
+        print(app.drinksShown)
+        print(app.scoreThresh)
+        # difficulty level changes if player becomes better/worse
+        if app.difficulty[-1] == "easy":
+            app.drinksShown = max(app.drinksShown-1, 2)
+            app.scoreThresh = min(app.scoreThresh+0.1, 0.6)
+            app.orderTime = min(app.orderTime+50, 600)
+        if app.difficulty[-1] == "normal":
+            app.drinksShown = 4
+            app.scoreThresh = 0.4
+            app.orderTime = 400
+        if app.difficulty[-1] == "hard":
+            app.drinksShown = min(app.drinksShown+1, 7)
+            app.scoreThresh = max(app.scoreThresh-0.1, 0.2)
+            app.orderTime = max(app.orderTime-50, 300)
+
+    # count down timer increases
+    app.time += 1
 
     # show instruction to go to makeDrinkMode
     if distance(app.activeChar.x, app.activeChar.y, app.cofMac.x, app.cofMac.y) <= 50:
@@ -143,7 +173,7 @@ def cafeMode_timerFired(app):
     # show order 
     if app.isOrdering:
         app.counter += app.timerDelay
-        if (app.counter % 300 == 0):
+        if (app.counter == app.orderTime):
             app.isOrdering = False
             app.isWaiting = True
     # barista serving drink to customer
@@ -152,10 +182,18 @@ def cafeMode_timerFired(app):
         startPos = (app.waiter.x, app.waiter.y)
         targetPos = (app.currCustomer.x, app.currCustomer.y)
         app.path = pathfinding(app, startPos, targetPos)
-        print(app.path)
         if app.waiter.x == app.currCustomer.x and app.waiter.y == app.currCustomer.y:
             app.mode = "scoreMode"
-        
+
+# helper: check how good player is to modify game difficulty
+def checkDifficulty(app):
+    if app.score/app.winScore < app.time/app.gameTime:
+        app.difficulty.append("easy")
+    if app.score/app.winScore == app.time/app.gameTime:
+        app.difficulty.append("normal")
+    if app.score/app.winScore > app.time/app.gameTime:
+        app.difficulty.append("hard")      
+
 # using arrow keys
 def cafeMode_keyPressed(app, event):
     # accept customer order
@@ -164,16 +202,21 @@ def cafeMode_keyPressed(app, event):
         app.isOrdering = False
         app.isEntering = True
         custImg = app.custImgs[random.randint(0, len(app.custImgs)-1)]
-        drink = app.drinks[random.randint(0, len(app.drinks)-1)]
+        drink = app.drinks[random.randint(0, app.drinksShown-1)]
         base = app.bases[random.randint(1, len(app.bases)-1)]
         art = app.arts[random.randint(0, len(app.arts)-1)]
-        order = f"{drink} with {base} milk, {art}"
-        app.currCustomer = Customer("1", 0, 145, custImg, drink, base, art, order)
+        if app.day > 2:
+            pastry = app.pastries[random.randint(0, app.pastriesShown-1)]
+            order = f"{drink} with {base} milk, {art} + {pastry}"
+            app.currCustomer = Customer("1", 0, 145, custImg, drink, base, art, order, pastry)
+            print(app.currCustomer.pastry)
+        else:
+            order = f"{drink} with {base} milk, {art}"
+            app.currCustomer = Customer("1", 0, 145, custImg, drink, base, art, order)
         app.customers.append(app.currCustomer)
         print(app.currCustomer.order)
         print(app.currCustomer.art)
         
-   
     # toggle beetween characters
     if event.key == "b":
         app.activeChar = app.waiter if app.activeChar == app.barista else app.barista
@@ -235,7 +278,7 @@ def pathfinding(app, start, end):
     # Add the start node
     open_list.append(start_node)
 
-    # Loop until you find the end
+    # iterate until target location is reached
     while len(open_list) > 0:
         # Get the current node
         current_node = open_list[0]
@@ -249,14 +292,14 @@ def pathfinding(app, start, end):
         open_list.pop(current_index)
         closed_list.append(current_node)
 
-        # Found the goal
+        # reached target
         if current_node == end_node:
             path = []
             current = current_node
             while current is not None:
                 path.append(current.position)
                 current = current.parent
-            return path[::-1] # Return reversed path
+            return path[::-1] 
 
         # Generate children
         children = []
@@ -265,12 +308,10 @@ def pathfinding(app, start, end):
             # Get node position
             node_position = (current_node.position[0] + new_position[0], current_node.position[1] + new_position[1])
 
-            # Make sure within range
-            if node_position[0] > 570 or node_position[0] < 70 or node_position[1] > 570 or node_position[1] < 70:
+            # check legality of move in board
+            if node_position[0] > 545 or node_position[0] < 95 or node_position[1] > 545 or node_position[1] < 95:
                 print("out of bounds")
                 continue
-
-            # Make sure walkable terrain
             if app.boardGrid[getRow(app, node_position[0])][getCol(app, node_position[1])] != 0:
                 continue
 
@@ -298,6 +339,16 @@ def pathfinding(app, start, end):
 
             # Add the child to the open list
             open_list.append(child)
+
+def cafeMode_mousePressed(app, event):
+    x = event.x
+    y = event.y
+
+    if distance(x, y, 605, 35) < 30:
+        app.mode = "cafeInstructionsMode"
+
+
+
 
 
 

@@ -7,9 +7,11 @@ from cmu_112_graphics_openCV import *
 from classes import *
 from home import *
 from cafe import *
+from cafeInstructions import *
 from makeDrink import *
 from latteArt import *
 from score import *
+from scoreInstructions import *
 from end import *
 import tkinter as tk
 import pickle
@@ -24,6 +26,7 @@ def appStarted(app):
     app.selectUser = tk.Entry()
     app.counter = 0
     app.day = 1
+    app.difficulty = ["normal"]
 
     app.mode = 'homeMode'
     print(app.mode)
@@ -39,6 +42,7 @@ def appStarted(app):
     app.winScore = 10
     app.win = False
     app.time = 0
+    app.gameTime = 5000
     app.timeOver = False
     app.isStarting = True
 
@@ -48,6 +52,7 @@ def appStarted(app):
     app.timerImg = ImageTk.PhotoImage(app.loadImage("images/timer.jpg"))
     app.moonImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/moon.png"),1/12))
     app.sunImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/sun.png"),1/12))
+    app.helpImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/help.png"),1/12))
 
     # furniture
     cofMacImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/cofmac.png"),1/10))
@@ -55,6 +60,8 @@ def appStarted(app):
     app.closeCofMac = False
     tableImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/table.png"),1/10))
     app.table = Furniture("table", 95+50*random.randint(0, 4), 95+50*random.randint(2, 8), tableImg)
+    menuImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/menu.png"),1/10))
+    app.menu = Furniture("menu", 495, 145, menuImg)
    
     # characters
     baristaImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/barista.png"),1/10))
@@ -80,12 +87,18 @@ def appStarted(app):
 
     # orders
     app.cup = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/topviewcup.png"), 0.9))
-    app.drinks = ['Latte', 'Macchiato', 'Cappucino', 'Cortado']
+    app.pastries = ['Croissant', 'Donut', 'Muffin', 'Scone']
+    app.pastriesShown = 2
+    app.drinks = ['Latte', 'Macchiato', 'Cappucino', 'Cortado', "Matcha", "Mocha", "Chai"]
+    app.drinksShown = 4
     app.espresso = Base("espresso", "#481C0A", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/coffebeans.png"),1/10)))
     app.dairy = Base("dairy", "#F6F1EF", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/dairymilk.png"),1/10)))
     app.oat = Base("oat", "#F2E8D4", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/oatmilk.png"),1/10)))
     app.soy = Base("soy", "#F2E8D4", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/soymilk.png"),1/10)))
     app.almond = Base("almond", "#F2E8D4", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/almondmilk.png"),1/10)))
+    app.matcha = Base("matcha", "#7ab555", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/matcha.png"),1/10)))
+    app.mocha = Base("mocha", "#803916", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/mocha.png"),1/10)))
+    app.chai = Base("chai", "#ff8421", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/chai.png"),1/10)))
     app.bases = ["espresso", "dairy", "oat", "soy", "almond"]
     app.currBase = Base("empty", "#FFFFFF", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/coffebeans.png"),1/10)))
     app.foam = Base("foam", "#FFFFFF", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/steamer.png"),1/10)))
@@ -95,6 +108,7 @@ def appStarted(app):
     app.drinkOrder = ""
     app.cupFull = False
     app.resultImg = ""
+    app.orderTime = 400 # decrease to make harder
     # app.flavors
 
     # openCV
@@ -110,6 +124,7 @@ def appStarted(app):
     app.starImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/star.png"), 1/4))
     app.flowerImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/flower.png"), 1/4))
     app.artOrdered = ""
+    app.scoreThresh = 0.4
 
     # end
     app.closedImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/close.png"), 1/3.5))
@@ -129,14 +144,14 @@ def appStarted(app):
 '''''''''''''''''''''''''''''''''
 CONTROLLER
 '''''''''''''''''''''''''''''''''
-def timerFired(app):
-    # with open(f"{app.username}.pkl", "wb") as outp:
-    #     pickle.dump(app.user, outp, -1)
-    if app.time == 400: 
-        app.timeOver
-        app.mode = "endMode"
-        app.day += 1
-  
+# def timerFired(app):
+#     # with open(f"{app.username}.pkl", "wb") as outp:
+#     #     pickle.dump(app.user, outp, -1)
+#     if app.time == 400: 
+#         app.timeOver
+#         app.mode = "endMode"
+#         app.day += 1
+     
 
 runApp(width = 640, height = 640)
 # print(combineColors(app, "#481C0A", "#481C0A"))

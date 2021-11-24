@@ -28,6 +28,8 @@ def scoreMode_redrawAll(app, canvas):
     canvas.create_rectangle(app.width*0.25-100, app.height*0.4-100, app.width*0.25+100, app.height*0.4+100, fill=app.currBase.color, width=0)
     canvas.create_image(app.width*0.25, app.height*0.4, image=app.artOrdered)
 
+    # score rubrics
+    canvas.create_image(605, 35, image=app.helpImg)
     # text 
     canvas.create_text(app.width/4, app.height*0.2, text="Customer Order")
     canvas.create_text(app.width*0.75, app.height*0.2, text="Your creation")
@@ -60,7 +62,14 @@ CONTROLLER
 # drinkMade is a dictionary containing espresso + milk bases and their radii
 # customer is app.currCustomer
 def correctBase(drinkMade, customer):
-    if "espresso" not in drinkMade: return False
+    if customer.drink in ["Latte", "Cappucino","Macchiato", "Cortado"]:
+        if "espresso" not in drinkMade: return False
+    if customer.drink == "Matcha":
+        if "matcha" not in drinkMade: return False
+    if customer.drink == "Mocha":
+        if "mocha" not in drinkMade: return False
+    if customer.drink == "Chai":
+        if "chai" not in drinkMade: return False
     if "foam" not in drinkMade: return False
     # more than 1 milk base
     if customer.drink in ["Macchiato", "Cortado"]:
@@ -77,6 +86,9 @@ def correctProportions(app, drinkMade, customer):
     macchiato = {"espresso": 50, "foam": 30}
     cappucino = {"espresso": 50, customer.base: 50, "foam": 50}
     cortado = {"espresso": 50, "foam": 50}
+    matcha = {"matcha": 30, customer.base: 110, "foam":10}
+    mocha = {"mocha": 30, customer.base: 110, "foam":10}
+    chai = {"chai": 30, customer.base: 110, "foam":10}
     if customer.drink == "Latte":
         app.drinkOrder = latte
         if drinkMade != latte:
@@ -92,6 +104,18 @@ def correctProportions(app, drinkMade, customer):
     if customer.drink == "Cortado":
         app.drinkOrder = cortado
         if drinkMade != cortado:
+            return False
+    if customer.drink == "Matcha":
+        app.drinkOrder = matcha
+        if drinkMade != matcha:
+            return False
+    if customer.drink == "Mocha":
+        app.drinkOrder = mocha
+        if drinkMade != mocha:
+            return False
+    if customer.drink == "Chai":
+        app.drinkOrder = chai
+        if drinkMade != chai:
             return False
     return True
 
@@ -146,6 +170,11 @@ def scoreMode_timerFired(app):
 def scoreMode_mousePressed(app, event):
     x = event.x
     y = event.y
+
+    # go to rubrics page
+    if distance(x, y, 605, 35) < 30:
+        app.mode = "scoreInstructionsMode"
+
     if distance(x, y, app.width*0.92, app.height*0.92) < 30:
         app.waiter.x = 395
         app.waiter.y = 395
@@ -157,13 +186,15 @@ def scoreMode_mousePressed(app, event):
             app.score += 1
         if correctProportions(app, app.drinkMade, app.currCustomer):
             app.score += 1
-        if app.artScore >= 0.4:
+        if app.artScore >= app.scoreThresh:
             app.score += 1
         if app.score >= app.winScore:
             app.win = True
 
         # create new cup
         app.currBase = Base("empty", "#FFFFFF", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/coffebeans.png"),1/10)))
+        app.cupFull = False
+        app.drinkMade = dict()
 
         app.mode = "cafeMode"
         app.isStarting = True

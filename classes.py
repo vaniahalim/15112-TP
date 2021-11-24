@@ -25,7 +25,7 @@ class Art(object):
         self.color = ""
 
 class Customer(object):
-    def __init__(self, name, x, y, img, drink, base, art, order):
+    def __init__(self, name, x, y, img, drink, base, art, order, pastry=None):
         self.name = name
         self.x = x
         self.y = y
@@ -34,6 +34,7 @@ class Customer(object):
         self.art = art
         self.img = img
         self.order = order
+        self.pastry = pastry
 
 # pathfinding: https://medium.com/@nicholas.w.swift/easy-a-star-pathfinding-7e6689c7f7b2
 class Node():

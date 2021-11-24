@@ -16,8 +16,9 @@ VIEW
 def latteArtMode_redrawAll(app, canvas):
     canvas.create_rectangle(0, 0, app.width, app.height, fill = "lavender")
     canvas.create_text(app.width/2, app.height/10, text="Time for latte art!", font="Baskerville 24")
-    canvas.create_text(app.width/2, app.height*0.15, text="Press c to start pouring! Tip: pour slowly...", font="Avenir 20")
-    canvas.create_text(app.width/2, app.height*0.2, text="Use index finger to pour; Raise 2 or more fingers to stop", font="Avenir 16")
+    canvas.create_text(app.width/2, app.height*0.15, text="Press c to open the camera! Move it beside the game screen", font="Avenir 20")
+    canvas.create_text(app.width/2, app.height*0.2, text="Use index finger to pour the foam; Raise 2 or more fingers to stop", font="Avenir 16")
+    canvas.create_text(app.width/2, app.height*0.85, text="Tip: work inside the black circle and pour slowly...", font="Avenir 16")
     canvas.create_image(app.width*0.9, app.height*0.92, image=app.rightArrowImg)
     # canvas.create_image(app.width*0.1, app.height*0.92, image=app.leftArrowImg)
     canvas.create_image(app.width/2+10, app.height/2+20, image=app.cup)
@@ -127,4 +128,8 @@ def latteArtMode_keyPressed(app, event):
         print(app.imgCanvas[0][0])
         app.disp_cam = True
 
-
+def latteArtMode_timerFired(app):
+    if app.time >= app.gameTime: 
+        app.timeOver
+        app.mode = "endMode"
+    app.time += 1
