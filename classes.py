@@ -48,6 +48,32 @@ class Node():
     def __eq__(self, other):
         return self.position == other.position
 
+# playing music
+# SOURCE: https://www.cs.cmu.edu/~112/notes/notes-animations-part4.html#playingSoundsWithPygame
+import pygame
+
+class Sound(object):
+    def __init__(self, path):
+        self.path = path
+        self.loops = 1
+        pygame.mixer.music.load(path)
+
+    # Returns True if the sound is currently playing
+    def isPlaying(self):
+        return bool(pygame.mixer.music.get_busy())
+
+    # Loops = number of times to loop the sound.
+    # If loops = 1 or 1, play it once.
+    # If loops > 1, play it loops + 1 times.
+    # If loops = -1, loop forever.
+    def start(self, loops=1):
+        self.loops = loops
+        pygame.mixer.music.play(loops=loops)
+
+    # Stops the current sound from playing
+    def stop(self):
+        pygame.mixer.music.stop()
+
 # helper fn: check character distance to object
 def distance(x0, y0, x1, y1):
     return (((x0-x1)**2 + (y0-y1)**2)**0.5)

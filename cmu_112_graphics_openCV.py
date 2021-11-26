@@ -705,10 +705,16 @@ class TopLevelApp(App):
         super().__init__(**kwargs)
 
     def _callFn(app, fn, *args):
-        if (app.mode != None) and (app.mode != ''):
+        isAppStopped = fn == 'appStopped'
+        isUsingMode = (app.mode != None) and (app.mode != '')
+        if isUsingMode:
             fn = app.mode + '_' + fn
         fn = app._fnPrefix + fn
         if (fn in app._callersGlobals): app._callersGlobals[fn](*args)
+        if (isAppStopped and isUsingMode):
+            # call the non-mode appStopped if there is one
+            fn = app._fnPrefix + 'appStopped'
+            if (fn in app._callersGlobals): app._callersGlobals[fn](*args)
 
     def redrawAll(app, canvas): app._callFn('redrawAll', app, canvas)
     def appStarted(app): app._callFn('appStarted', app)

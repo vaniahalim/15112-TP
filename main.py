@@ -1,12 +1,14 @@
 # main file to run animation
 # import all files
 
-# SOURCE NOTES: images are cited on the first screen they are used in
+# images are cited on the first screen they are used in
+# playing sounds: https://www.cs.cmu.edu/~112/notes/notes-animations-part4.html#playingSoundsWithPygame
 
 from cmu_112_graphics_openCV import *
 from classes import *
 from home import *
 from cafe import *
+from menu import *
 from cafeInstructions import *
 from makeDrink import *
 from latteArt import *
@@ -17,21 +19,36 @@ import tkinter as tk
 import pickle
 import random
 
+# background music
+import pygame
+from pygame.locals import *
+from pygame import mixer
+
 # def user class
 '''''''''''''''''''''''''''''''''
-MODEL
+CONTROLLER
 '''''''''''''''''''''''''''''''''
 def appStarted(app):
+    pygame.mixer.init()
+    app.sound = Sound("music2.mp3")
+    app.sound.start(loops=-1)
+
     app.username = ""
     app.selectUser = tk.Entry()
     app.counter = 0
     app.day = 1
     app.difficulty = ["normal"]
 
-    app.mode = 'homeMode'
+    app.mode = 'cafeMode'
     print(app.mode)
     app.cameraOpen = False
     app.disp_cam = False
+    
+    # screens: created by me on Canva
+    app.homeImg = ImageTk.PhotoImage(app.loadImage("screens/homepage.png"))
+    app.insImg = ImageTk.PhotoImage(app.loadImage("screens/instructions.png"))
+    app.scoreInsImg = ImageTk.PhotoImage(app.loadImage("screens/scoring.png"))
+    app.menuImg = ImageTk.PhotoImage(app.loadImage("screens/menu.png"))
     
     # cafe grid layout
     app.rows, app.cols, app.cellSize, app.margin = cafeDimensions()
@@ -139,12 +156,12 @@ def appStarted(app):
     # with open(f"{app.username}_progress.pkl", "rb") as inp:
     #     app.user = pickle.load(inp)
     
+def appStopped(app):
+    app.sound.stop()
 
+def timerFired(app):
+    pass
 
-'''''''''''''''''''''''''''''''''
-CONTROLLER
-'''''''''''''''''''''''''''''''''
-# def timerFired(app):
 #     # with open(f"{app.username}.pkl", "wb") as outp:
 #     #     pickle.dump(app.user, outp, -1)
 #     if app.time == 400: 

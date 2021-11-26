@@ -83,9 +83,9 @@ def correctBase(drinkMade, customer):
 # helper: checks if drink made has the right proportion of espresso and milk and milk foam
 def correctProportions(app, drinkMade, customer):
     latte = {"espresso": 30, customer.base: 110, "foam":10}
-    macchiato = {"espresso": 50, "foam": 30}
+    macchiato = {"espresso": 70, "foam": 30}
     cappucino = {"espresso": 50, customer.base: 50, "foam": 50}
-    cortado = {"espresso": 50, "foam": 50}
+    cortado = {"espresso": 70, "foam": 60}
     matcha = {"matcha": 30, customer.base: 110, "foam":10}
     mocha = {"mocha": 30, customer.base: 110, "foam":10}
     chai = {"chai": 30, customer.base: 110, "foam":10}

@@ -22,7 +22,7 @@ VIEW
 '''''''''''''''''''''''''''''''''
 def makeDrinkMode_redrawAll(app, canvas):
     canvas.create_rectangle(0, 0, app.width, app.height, fill = "lavender")
-    canvas.create_text(app.width/2, app.height/10, text="Pour Ingredients!", font="Baskerville 24")
+    canvas.create_text(app.width/2, app.height/10, text="Pour Ingredients!", font="{Arial Rounded MT Bold} 24")
     canvas.create_text(app.width/2, app.height*0.15, text="Click on ingredients to pour into cup", font="Avenir 18")
     canvas.create_text(app.width/2, app.height*0.85, text="Tip: recall each order's ingredients and proportions", font="Avenir 16")
     canvas.create_image(app.width*0.9, app.height*0.92, image=app.rightArrowImg)

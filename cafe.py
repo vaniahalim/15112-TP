@@ -232,9 +232,15 @@ def cafeMode_keyPressed(app, event):
     
     # switch to makedrink mode
     elif distance(app.activeChar.x, app.activeChar.y, app.cofMac.x, app.cofMac.y) <= 50:
+        if app.currCustomer != None:
+            if event.key == "Return" or event.key == "Enter":
+                app.mode = "makeDrinkMode"
+                app.currCustomer.x, app.currCustomer.y = getRandPos(app)
+    
+    # check menu
+    elif distance(app.activeChar.x, app.activeChar.y, app.menu.x, app.menu.y) <= 50:
         if event.key == "Return" or event.key == "Enter":
-            app.mode = "makeDrinkMode"
-            app.currCustomer.x, app.currCustomer.y = getRandPos(app)
+            app.mode = "menuMode"
 
 # helper: recursive function to get random available position for customer to stand at
 def getRandPos(app):
