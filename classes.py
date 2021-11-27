@@ -74,6 +74,15 @@ class Sound(object):
     def stop(self):
         pygame.mixer.music.stop()
 
-# helper fn: check character distance to object
+# helper: check character distance to object
 def distance(x0, y0, x1, y1):
     return (((x0-x1)**2 + (y0-y1)**2)**0.5)
+
+# helper: get cell from coordinates
+def getRow(app, y):
+    row = int((y - app.margin) / app.cellSize)
+    return row
+
+def getCol(app, x):
+    col = int((x - app.margin) / app.cellSize)
+    return col

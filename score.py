@@ -197,7 +197,6 @@ def scoreMode_mousePressed(app, event):
         app.drinkMade = dict()
 
         app.mode = "cafeMode"
-        app.isStarting = True
         
     
     

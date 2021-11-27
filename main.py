@@ -39,7 +39,7 @@ def appStarted(app):
     app.day = 1
     app.difficulty = ["normal"]
 
-    app.mode = 'cafeMode'
+    app.mode = 'homeMode'
     print(app.mode)
     app.cameraOpen = False
     app.disp_cam = False
@@ -49,7 +49,9 @@ def appStarted(app):
     app.insImg = ImageTk.PhotoImage(app.loadImage("screens/instructions.png"))
     app.scoreInsImg = ImageTk.PhotoImage(app.loadImage("screens/scoring.png"))
     app.menuImg = ImageTk.PhotoImage(app.loadImage("screens/menu.png"))
-    
+    app.failImg = ImageTk.PhotoImage(app.loadImage("screens/fail.png"))
+    app.passImg = ImageTk.PhotoImage(app.loadImage("screens/pass.png"))
+
     # cafe grid layout
     app.rows, app.cols, app.cellSize, app.margin = cafeDimensions()
     app.emptyColor = "pink"
@@ -72,13 +74,17 @@ def appStarted(app):
     app.helpImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/help.png"),1/12))
 
     # furniture
-    cofMacImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/cofmac.png"),1/10))
-    app.cofMac = Furniture("cofMac", 495, 245, cofMacImg)
+    app.floorImg = ImageTk.PhotoImage(app.loadImage("images/floor.png"))
+    cofMacImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/cofmac.png"),1/6))
+    app.cofMac = Furniture("cofMac", 545, 245, cofMacImg)
     app.closeCofMac = False
-    tableImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/table.png"),1/10))
-    app.table = Furniture("table", 95+50*random.randint(0, 4), 95+50*random.randint(2, 8), tableImg)
-    menuImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/menu.png"),1/10))
-    app.menu = Furniture("menu", 495, 145, menuImg)
+    app.tableImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/coftable.png"), 0.8))
+    app.tables = []
+    app.tableNo = 5
+    app.counterImg = ImageTk.PhotoImage(app.loadImage("images/counter.png"))
+    menuImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/menu.png"),1/11))
+    app.menu = Furniture("menu", 545, 145, menuImg)
+    app.plantImg = ImageTk.PhotoImage(app.loadImage("images/plant.png"))
    
     # characters
     baristaImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/barista.png"),1/10))
@@ -158,9 +164,6 @@ def appStarted(app):
     
 def appStopped(app):
     app.sound.stop()
-
-def timerFired(app):
-    pass
 
 #     # with open(f"{app.username}.pkl", "wb") as outp:
 #     #     pickle.dump(app.user, outp, -1)

@@ -3,6 +3,8 @@
 
 # import modules
 from cmu_112_graphics_openCV import *
+import random
+from classes import *
 
 '''''''''''''''''''''''''''''''''
 VIEW
@@ -22,10 +24,29 @@ def homeMode_mousePressed(app, event):
     (y >= app.height*0.87-29 and y <= app.height*0.87+29):
         app.mode = 'cafeMode'
 
+        # indicate furniture locations on board as non-empty
+        # coffee machine, menu, plants
+        app.boardGrid[getRow(app, app.cofMac.y)][getCol(app, app.cofMac.x)] = 1
+        app.boardGrid[getRow(app, app.menu.y)][getCol(app, app.menu.x)] = 1
+        app.boardGrid[1][5] = 1
+        app.boardGrid[0] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        app.boardGrid[9] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        # tables
+        for i in range(0, random.randint(1,app.tableNo)):
+            table = Furniture("table", 95+50*random.randint(0, 4), 95+50*random.randint(2, 8), app.tableImg)
+            app.tables.append(table)
+        for table in app.tables:
+            app.boardGrid[getRow(app, table.y)][getCol(app, table.x)] = 1
+            print(getRow(app, table.y), getCol(app, table.x))
+            print(table.y, table.x)
+        print(app.tables)
+        print(app.boardGrid)
+
 def homeMode_keyPressed(app, event):
     if event.key == "Return" or event.key == "Enter":
         app.mode = "cafeMode"
         # check if username is in app.usernames list, if not create a new user
         app.user = app.selectUser.get()
         print("entered")
+        
 

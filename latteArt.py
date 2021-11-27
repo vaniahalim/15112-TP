@@ -43,6 +43,7 @@ def latteArtMode_mousePressed(app, event):
         app.mode = "cafeMode"
         app.isServing = True
         app.activeChar = app.waiter
+        app.waiter.x, app.waiter.y = (395, 395)
         # app.camera.release()
         app.disp_cam = False
       

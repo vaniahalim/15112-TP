@@ -5,14 +5,14 @@
 # waiter image: https://www.iconfinder.com/icons/6655714/barista_cartoon_girl_isometric_love_party_woman_icon
 # coffee machine image: https://www.vecteezy.com/vector-art/1983572-isometric-coffee-machine-illustrated-on-white-background
 # counter image: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Fpremium-vector%2Fcoffee-house-isometric-illustration-coffeeshop-counter-tables-with-chairs-isolated-clipart_10912455.htm&psig=AOvVaw27CZ0GuBOpJH4o8THG1Cgs&ust=1637440249975000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCPiCg7mipfQCFQAAAAAdAAAAABAP
-# table image: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vectorstock.com%2Froyalty-free-vector%2Fwood-table-icon-isometric-style-vector-27067678&psig=AOvVaw1FrR5KlcPIY6L6suhatLl-&ust=1637722650771000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCNiRxsG_rfQCFQAAAAAdAAAAABAS
+# table image: https://www.iconfinder.com/icons/6656008/cartoon_folding_hand_isometric_retro_round_table_icon
 # sun image: https://www.flaticon.com/packs/nature-92
 # moon image: https://www.flaticon.com/premium-icon/moon_1888300?related_id=1888300&origin=pack
 # timer image: https://www.google.com/imgres?imgurl=https%3A%2F%2Fwww.xmple.com%2Fwallpaper%2Forange-blue-gradient-linear-1920x1080-c2-0000cd-ff8c00-a-45-f-14.svg&imgrefurl=https%3A%2F%2Fwww.xmple.com%2Fwallpaper%2Forange-blue-gradient-linear--c2-0000cd-ff8c00-a-45-f-14-image%2F&tbnid=Bn41Fc6ZA9X_JM&vet=12ahUKEwjag47pv630AhWLBc0KHW1cAkoQMygOegUIARDyAQ..i&docid=CCYxh7MBUtbZdM&w=1920&h=1080&itg=1&q=orange%20blue%20gradient&ved=2ahUKEwjag47pv630AhWLBc0KHW1cAkoQMygOegUIARDyAQ
 # people images: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.dreamstime.com%2Fcreative-pack-isometric-people-flat-icons-providing-awesome-features-human-avatars-performing-various-activities-image125598730&psig=AOvVaw2gdVQ-_yHhfKPwtFq5cX0K&ust=1637723158290000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCJjx9KvArfQCFQAAAAAdAAAAABAD
 # help image: https://www.flaticon.com/premium-icon/help_2550424?term=help%20button&page=1&position=80&page=1&position=80&related_id=2550424&origin=search
 # menu image: https://www.flaticon.com/premium-icon/help_2550424?term=help%20button&page=1&position=80&page=1&position=80&related_id=2550424&origin=search
-
+# plant image: https://www.flaticon.com/free-icon/plant_628283#
 # pathfinding: https://medium.com/@nicholas.w.swift/easy-a-star-pathfinding-7e6689c7f7b2
 
 # import modules
@@ -41,10 +41,9 @@ VIEW
 # draw canvas
 def cafeMode_redrawAll(app, canvas):
     # draw cafe grid
-    canvas.create_rectangle(0, 0, app.width, app.height, fill="lightblue", width=1)
-    drawLayout(app, canvas)
-    # draw menu
-    canvas.create_image(app.menu.x, app.menu.y, image=app.menu.img)
+    canvas.create_rectangle(0, 0, app.width, app.height, fill="#FFE9DF", width=1)
+    canvas.create_image(app.width/2, app.height/2, image=app.floorImg)
+    # drawLayout(app, canvas)
     # draw instructions 
     canvas.create_image(605, 35, image=app.helpImg)
     # draw score progress bar 
@@ -58,7 +57,6 @@ def cafeMode_redrawAll(app, canvas):
         canvas.create_line(590,120+(app.time/app.gameTime)*400,620,120+(app.time/app.gameTime)*400, fill="lightblue", width=2)
     canvas.create_image(605, 95, image=app.sunImg)
     canvas.create_image(605, 545, image=app.moonImg)
-    
 
     # draw barista
     canvas.create_image(app.barista.x, app.barista.y, image=app.barista.img)
@@ -72,9 +70,16 @@ def cafeMode_redrawAll(app, canvas):
     if app.closeCofMac:
         canvas.create_text(app.width/2, 35, text="Press enter to make drinks!")
     # draw tables
-    for i in range(0, random.randint(1,5)):
-        canvas.create_image(app.table.x, app.table.y, image=app.table.img)
-
+    for table in app.tables:
+        canvas.create_image(table.x, table.y, image=table.img)
+    canvas.create_image(345, 145, image=app.counterImg)
+    # draw plants
+    for x in range(95, 555, 50):
+        canvas.create_image(x, 95, image=app.plantImg)
+        canvas.create_image(x, 545, image=app.plantImg)
+     # draw menu
+    canvas.create_image(app.menu.x, app.menu.y, image=app.menu.img)
+    
     # draw order text
     if app.isOrdering:
         canvas.create_text(app.width/2, 35, text=app.currCustomer.order)
@@ -102,28 +107,28 @@ def getCellBounds(app, row, col):
 
     return [x1,y1,x2,y2]
 
-# helper: get cell from coordinates
-def getRow(app, y):
-    row = int((y - app.margin) / app.cellSize)
-    return row
-
-def getCol(app, x):
-    col = int((x - app.margin) / app.cellSize)
-    return col
 
 '''''''''''''''''''''''''''''''''
 CONTROLLER
 '''''''''''''''''''''''''''''''''
 def cafeMode_timerFired(app):
     # set up board
-    app.board = [([app.emptyColor] * app.cols) for row in range(app.rows)]
-    app.boardGrid = [([0] * app.cols) for row in range(app.rows)]
-    app.boardGrid[getRow(app, app.cofMac.y)][getCol(app, app.cofMac.x)] = 1
-    app.boardGrid[getRow(app, app.table.y-25)][getCol(app, app.table.x-25)] = 1
-    app.board[getRow(app, app.barista.y)][getCol(app, app.barista.x)] = "blue"
-    app.boardGrid[getRow(app, app.barista.y)][getCol(app, app.barista.x)] = 1
-    app.board[getRow(app, app.waiter.y)][getCol(app, app.waiter.x)] = "orchid"
-    app.boardGrid[getRow(app, app.waiter.y)][getCol(app, app.waiter.x)] = 1
+    # app.board = [([app.emptyColor] * app.cols) for row in range(app.rows)]
+    # app.boardGrid = [([0] * app.cols) for row in range(app.rows)]
+    # app.boardGrid[getRow(app, app.cofMac.y)][getCol(app, app.cofMac.x)] = 1
+    # for table in app.tables:
+    #     app.boardGrid[getRow(app, table.y)][getCol(app, table.x)] = 1
+    #     print(app.boardGrid)
+    # app.board[getRow(app, app.barista.y)][getCol(app, app.barista.x)] = "blue"
+    # app.boardGrid[getRow(app, app.barista.y)][getCol(app, app.barista.x)] = 1
+    # app.board[getRow(app, app.waiter.y)][getCol(app, app.waiter.x)] = "orchid"
+    # app.boardGrid[getRow(app, app.waiter.y)][getCol(app, app.waiter.x)] = 1
+    for row in range(10):
+        for col in range(10):
+            if row == getRow(app,app.activeChar.y) and col == getCol(app,app.activeChar.x):
+                app.board[row][col] = "blue"
+            else:
+                app.board[row][col] = app.emptyColor
 
     # indicate position on board as filled
     if app.currCustomer != None:
@@ -141,19 +146,23 @@ def cafeMode_timerFired(app):
         print(app.difficulty)
         print(app.drinksShown)
         print(app.scoreThresh)
-        # difficulty level changes if player becomes better/worse
+        # difficulty level changes if player becomes better/worse 
+        # changes number of drinks, score threshold, time order is shown, number of tables (obstacles)
         if app.difficulty[-1] == "easy":
             app.drinksShown = max(app.drinksShown-1, 2)
             app.scoreThresh = min(app.scoreThresh+0.1, 0.6)
             app.orderTime = min(app.orderTime+50, 600)
+            app.tableNo = max(app.tableNo-1, 2)
         if app.difficulty[-1] == "normal":
             app.drinksShown = 4
             app.scoreThresh = 0.4
             app.orderTime = 400
+            app.tableNo = 5
         if app.difficulty[-1] == "hard":
             app.drinksShown = min(app.drinksShown+1, 7)
             app.scoreThresh = max(app.scoreThresh-0.1, 0.2)
             app.orderTime = max(app.orderTime-50, 300)
+            app.tableNo = min(app.tableNo+1, 7)
 
     # count down timer increases
     app.time += 1
@@ -167,7 +176,7 @@ def cafeMode_timerFired(app):
     # customer enters
     if app.isEntering:
         app.currCustomer.x += 10
-        if app.currCustomer.x >= app.barista.x - 50:
+        if app.currCustomer.x >= app.barista.x - 100:
             app.isEntering = False
             app.isOrdering = True
     # show order 
@@ -269,7 +278,7 @@ def moveChar(app, drow, dcol):
 # helper fn: check if move can be made (not out of bounds)
 def moveIsLegal(app):
     char = app.activeChar
-    if char.x >= 70 and char.x <= 570 and char.y>= 70 and char.y<=570:
+    if (app.boardGrid[getRow(app, char.y)][getCol(app, char.x)] == 0) and char.x >= 70 and char.x <= 570 and char.y>= 120 and char.y<=570:
         return True
     return False
 
@@ -315,10 +324,10 @@ def pathfinding(app, start, end):
             node_position = (current_node.position[0] + new_position[0], current_node.position[1] + new_position[1])
 
             # check legality of move in board
-            if node_position[0] > 545 or node_position[0] < 95 or node_position[1] > 545 or node_position[1] < 95:
-                print("out of bounds")
-                continue
-            if app.boardGrid[getRow(app, node_position[0])][getCol(app, node_position[1])] != 0:
+            # if node_position[0] > 545 or node_position[0] < 95 or node_position[1] > 545 or node_position[1] < 95:
+            #     print("out of bounds")
+            #     continue
+            if app.boardGrid[getRow(app, node_position[0]-25)][getCol(app, node_position[1]-25)] != 0:
                 continue
 
             # Create new node
