@@ -2,7 +2,6 @@
 # import all files
 
 # images are cited on the first screen they are used in
-# playing sounds: https://www.cs.cmu.edu/~112/notes/notes-animations-part4.html#playingSoundsWithPygame
 
 from cmu_112_graphics_openCV import *
 from classes import *
@@ -29,14 +28,34 @@ from pygame import mixer
 CONTROLLER
 '''''''''''''''''''''''''''''''''
 def appStarted(app):
+    # get username to get player progress
+    # SOURCE: https://www.cs.cmu.edu/~112/notes/notes-animations-part4.html#ioMethods
+    app.username = app.getUserInput("Hello there! What's your name?").lower()
+    app.day = 1
+    
+    # SOURCE: https://www.guru99.com/reading-and-writing-files-in-python.html
+    f = open("users.txt", "r+")
+    contents = f.readlines()
+    isIn = False
+    for line in contents:
+        if app.username in line:
+            app.day = int(line[-3])
+            isIn = True
+            break
+    if isIn == False:
+        f.write(f"{app.username} 1 \n")
+    f.close()
+    print(app.day)
+
+    # bg music
+    # SOURCE: https://www.cs.cmu.edu/~112/notes/notes-animations-part4.html#playingSoundsWithPygame
     pygame.mixer.init()
     app.sound = Sound("music2.mp3")
     app.sound.start(loops=-1)
 
-    app.username = ""
-    app.selectUser = tk.Entry()
+
+    # app.selectUser = tk.Entry()
     app.counter = 0
-    app.day = 1
     app.difficulty = ["normal"]
 
     app.mode = 'homeMode'
@@ -59,7 +78,7 @@ def appStarted(app):
     app.boardGrid = [([0] * app.cols) for row in range(app.rows)]
     app.score = 0
     app.winScore = 10
-    app.win = False
+    app.win = True
     app.time = 0
     app.gameTime = 5000
     app.timeOver = False
@@ -165,12 +184,13 @@ def appStarted(app):
 def appStopped(app):
     app.sound.stop()
 
+# def timerFired(app):
+#     file = open("day.txt", "r")
+#     contents = file.read()
+#     print(contents)
+
 #     # with open(f"{app.username}.pkl", "wb") as outp:
 #     #     pickle.dump(app.user, outp, -1)
-#     if app.time == 400: 
-#         app.timeOver
-#         app.mode = "endMode"
-#         app.day += 1
      
 
 runApp(width = 640, height = 640)

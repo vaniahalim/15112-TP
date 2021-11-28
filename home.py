@@ -11,7 +11,7 @@ VIEW
 '''''''''''''''''''''''''''''''''
 def homeMode_redrawAll(app, canvas):
     canvas.create_image(app.width/2, app.height/2, image=app.homeImg)
-    canvas.create_text(app.width*0.25, app.height*0.11, text=f"It's day {app.day}!", font="Arial 28 bold", fill="#481C0A")
+    canvas.create_text(app.width*0.25, app.height*0.11, text=f"Hi {app.username}! It's day {app.day}!", font="Arial 28 bold", fill="#481C0A")
     # canvas.create_window(app.width/2, app.height/1.2, width= 300, window=app.selectUser)
 '''''''''''''''''''''''''''''''''
 CONTROLLER

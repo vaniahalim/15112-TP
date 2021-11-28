@@ -13,6 +13,8 @@
 # help image: https://www.flaticon.com/premium-icon/help_2550424?term=help%20button&page=1&position=80&page=1&position=80&related_id=2550424&origin=search
 # menu image: https://www.flaticon.com/premium-icon/help_2550424?term=help%20button&page=1&position=80&page=1&position=80&related_id=2550424&origin=search
 # plant image: https://www.flaticon.com/free-icon/plant_628283#
+# floor image: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwallpaperaccess.com%2Flight-wood&psig=AOvVaw09MKrvQMjKpKJVNBXLsf9f&ust=1638128491372000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCOCc26qmufQCFQAAAAAdAAAAABAD
+
 # pathfinding: https://medium.com/@nicholas.w.swift/easy-a-star-pathfinding-7e6689c7f7b2
 
 # import modules
@@ -42,8 +44,8 @@ VIEW
 def cafeMode_redrawAll(app, canvas):
     # draw cafe grid
     canvas.create_rectangle(0, 0, app.width, app.height, fill="#FFE9DF", width=1)
+    drawLayout(app, canvas)
     canvas.create_image(app.width/2, app.height/2, image=app.floorImg)
-    # drawLayout(app, canvas)
     # draw instructions 
     canvas.create_image(605, 35, image=app.helpImg)
     # draw score progress bar 

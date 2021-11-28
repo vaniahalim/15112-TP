@@ -33,9 +33,24 @@ def endMode_mousePressed(app, event):
     y = event.y
     if distance(x, y, app.width*0.92, app.height*0.92) < 30:
         app.mode = "homeMode"
-        if app.win:
-            app.day += 1
         app.isStarting = True
         app.currCustomer = None
         app.time = 0
+        
+        # update player progress if they passed level
+        # SOURCE: https://www.kite.com/python/answers/how-to-edit-a-specific-line-in-a-text-file-in-python
+        if app.win:
+            f = open("users.txt", "r")
+            lines = f.readlines()
+            print(lines)
+            for i in range(len(lines)):
+                if app.username in lines[i]:
+                    app.day += 1
+                    lines[i] = f"{app.username} {app.day} \n"
+                    print(lines[i])
+
+            f = open("users.txt", "w")
+            f.writelines(lines)
+            f.close()
+        
         print(app.day)

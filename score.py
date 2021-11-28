@@ -34,11 +34,19 @@ def scoreMode_redrawAll(app, canvas):
     canvas.create_text(app.width/4, app.height*0.2, text="Customer Order")
     canvas.create_text(app.width*0.75, app.height*0.2, text="Your creation")
     # customer order
-    canvas.create_text(app.width/4, app.height*0.6, text=f"Ingredients... espresso, {app.currCustomer.base}, foam")
-    canvas.create_text(app.width/4, app.height*0.65, text=f"Proportions......{app.drinkOrder}")
+    if app.drinkOrder in ["Latte", "Cappucino","Macchiato", "Cortado"]:
+        flav = "espresso"
+    if app.drinkOrder == "Matcha":
+        flav = "matcha"
+    if app.drinkOrder == "Mocha":
+        flav = "mocha"
+    if app.drinkOrder == "Chai":
+        flav = "chai"
+    canvas.create_text(app.width/4, app.height*0.6, text=f"Ingredients... {flav}, {app.currCustomer.base}, foam")
+    canvas.create_text(app.width/4, app.height*0.65, text=f"Proportions...{app.drinkOrder}")
     # player creation
-    canvas.create_text(app.width*0.75, app.height*0.6, text=f"Ingredients... {getIngredients(app, app.drinkMade)}")
-    canvas.create_text(app.width*0.75, app.height*0.65, text=f"Proportions......{app.drinkMade}")
+    canvas.create_text(app.width*0.75, app.height*0.6, text=f"{getIngredients(app, app.drinkMade)}")
+    canvas.create_text(app.width*0.75, app.height*0.65, text=f"{app.drinkMade}")
     canvas.create_text(app.width/2, app.height*0.7, text=f"Art...{app.artScore}")
 
     # award cup scores for correct base and proportions
