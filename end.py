@@ -22,8 +22,6 @@ def endMode_redrawAll(app, canvas):
     
     # go back to home page
     canvas.create_image(app.width*0.9, app.height*0.92, image=app.rightArrowImg)
-    #canvas.create_image(app.width*0.1, app.height*0.92, image=app.leftArrowImg)
-
 
 '''''''''''''''''''''''''''''''''
 CONTROLLER

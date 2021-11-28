@@ -20,9 +20,8 @@ def scoreMode_redrawAll(app, canvas):
     canvas.create_rectangle(0, 0, app.width, app.height, fill = "peachpuff")
     canvas.create_text(app.width/2, app.height/10, text="Judging...", font="Baskerville 24")
     canvas.create_image(app.width*0.9, app.height*0.92, image=app.rightArrowImg)
-    # canvas.create_image(app.width*0.75, app.height*0.4, image=app.imageToTk(app.imgCanvas))
+    
     # displays result of player's drawing
-
     canvas.create_image(app.width*0.75, app.height*0.4, image=app.resultImg)
     # displays customer desired art
     canvas.create_rectangle(app.width*0.25-100, app.height*0.4-100, app.width*0.25+100, app.height*0.4+100, fill=app.currBase.color, width=0)
@@ -34,13 +33,13 @@ def scoreMode_redrawAll(app, canvas):
     canvas.create_text(app.width/4, app.height*0.2, text="Customer Order")
     canvas.create_text(app.width*0.75, app.height*0.2, text="Your creation")
     # customer order
-    if app.drinkOrder in ["Latte", "Cappucino","Macchiato", "Cortado"]:
+    if app.currCustomer.drink in ["Latte", "Cappucino","Macchiato", "Cortado"]:
         flav = "espresso"
-    if app.drinkOrder == "Matcha":
+    if app.currCustomer.drink == "Matcha":
         flav = "matcha"
-    if app.drinkOrder == "Mocha":
+    if app.currCustomer.drink == "Mocha":
         flav = "mocha"
-    if app.drinkOrder == "Chai":
+    if app.currCustomer.drink == "Chai":
         flav = "chai"
     canvas.create_text(app.width/4, app.height*0.6, text=f"Ingredients... {flav}, {app.currCustomer.base}, foam")
     canvas.create_text(app.width/4, app.height*0.65, text=f"Proportions...{app.drinkOrder}")
@@ -165,7 +164,6 @@ def getProportions(app):
     pass
 
 def scoreMode_timerFired(app):
-    # app.currCustomer = None
     app.resultImg = ImageTk.PhotoImage(app.loadImage("result.jpg"))
     app.disp_cam = False
     app.artScore = artScoring(app)

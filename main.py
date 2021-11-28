@@ -1,8 +1,7 @@
 # main file to run animation
-# import all files
-
 # images are cited on the first screen they are used in
 
+# import all files
 from cmu_112_graphics_openCV import *
 from classes import *
 from home import *
@@ -15,8 +14,6 @@ from score import *
 from scoreInstructions import *
 from end import *
 import tkinter as tk
-import pickle
-import random
 
 # background music
 import pygame
@@ -52,9 +49,6 @@ def appStarted(app):
     pygame.mixer.init()
     app.sound = Sound("music2.mp3")
     app.sound.start(loops=-1)
-
-
-    # app.selectUser = tk.Entry()
     app.counter = 0
     app.difficulty = ["normal"]
 
@@ -78,6 +72,10 @@ def appStarted(app):
     app.boardGrid = [([0] * app.cols) for row in range(app.rows)]
     app.score = 0
     app.winScore = 10
+    if app.day >= 5:
+        app.winScore = 12
+    if app.day >= 10:
+        app.winScore = 15
     app.win = True
     app.time = 0
     app.gameTime = 5000
@@ -117,14 +115,13 @@ def appStarted(app):
     girl2Img = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/girl2.png"),1/4))
     boy1Img = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/boy1.png"),1/4))
     boy2Img = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/boy2.png"),1/4))
-
     app.custImgs = [girl1Img, girl2Img, boy1Img, boy2Img]
     app.customers = []
     app.currCustomer = None
     app.isEntering = False
     app.isOrdering = False
     app.isWaiting = False
-    app.isServing = False
+    app.isServing = False 
     app.path = []
 
     # orders
@@ -151,8 +148,7 @@ def appStarted(app):
     app.cupFull = False
     app.resultImg = ""
     app.orderTime = 400 # decrease to make harder
-    # app.flavors
-
+    
     # openCV
     app.imgCanvas = np.zeros((200,200,3), np.uint8)
     
@@ -170,31 +166,8 @@ def appStarted(app):
 
     # end
     app.closedImg = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/close.png"), 1/3.5))
-
-
-    # loading and saving into username
-    # app.user = User()
-    # app.users = []
-
-    # pickled module: loading user data from file
-    # check if file exists, if not create new file
-    # with open(f"{app.username}_progress.pkl", "rb") as inp:
-    #     app.user = pickle.load(inp)
     
 def appStopped(app):
     app.sound.stop()
 
-# def timerFired(app):
-#     file = open("day.txt", "r")
-#     contents = file.read()
-#     print(contents)
-
-#     # with open(f"{app.username}.pkl", "wb") as outp:
-#     #     pickle.dump(app.user, outp, -1)
-     
-
 runApp(width = 640, height = 640)
-# print(combineColors(app, "#481C0A", "#481C0A"))
-
-# app started: load
-# timer fired: pickle.dump

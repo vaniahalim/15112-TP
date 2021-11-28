@@ -1,3 +1,4 @@
+# CLASSES AND HELPER FUNCTIONS
 # character classes for barista and waiter
 class Character(object):
     def __init__(self, name, x, y, img):
@@ -62,10 +63,6 @@ class Sound(object):
     def isPlaying(self):
         return bool(pygame.mixer.music.get_busy())
 
-    # Loops = number of times to loop the sound.
-    # If loops = 1 or 1, play it once.
-    # If loops > 1, play it loops + 1 times.
-    # If loops = -1, loop forever.
     def start(self, loops=1):
         self.loops = loops
         pygame.mixer.music.play(loops=loops)

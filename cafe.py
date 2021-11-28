@@ -21,7 +21,6 @@
 from cmu_112_graphics_openCV import *
 from classes import *
 import random
-import time
 
 '''''''''''''''''''''''''''''''''
 MODEL
@@ -133,8 +132,8 @@ def cafeMode_timerFired(app):
                 app.board[row][col] = app.emptyColor
 
     # indicate position on board as filled
-    if app.currCustomer != None:
-        app.boardGrid[getRow(app, app.currCustomer.y)][getCol(app, app.currCustomer.x)] = 1
+    # if app.currCustomer != None:
+    #     app.boardGrid[getRow(app, app.currCustomer.y)][getCol(app, app.currCustomer.x)] = 1
 
     # end of day
     if app.time >= app.gameTime: 
@@ -144,10 +143,7 @@ def cafeMode_timerFired(app):
     # modify difficulty of game:
     if app.time > 0 and app.time % 1000 == 0:
         checkDifficulty(app)
-        print(app.time)
-        print(app.difficulty)
-        print(app.drinksShown)
-        print(app.scoreThresh)
+
         # difficulty level changes if player becomes better/worse 
         # changes number of drinks, score threshold, time order is shown, number of tables (obstacles)
         if app.difficulty[-1] == "easy":
@@ -178,7 +174,7 @@ def cafeMode_timerFired(app):
     # customer enters
     if app.isEntering:
         app.currCustomer.x += 10
-        if app.currCustomer.x >= app.barista.x - 100:
+        if app.currCustomer.x >= 295:
             app.isEntering = False
             app.isOrdering = True
     # show order 
@@ -193,7 +189,7 @@ def cafeMode_timerFired(app):
         startPos = (app.waiter.x, app.waiter.y)
         targetPos = (app.currCustomer.x, app.currCustomer.y)
         app.path = pathfinding(app, startPos, targetPos)
-        if app.waiter.x == app.currCustomer.x and app.waiter.y == app.currCustomer.y:
+        if (app.waiter.x == app.currCustomer.x) and (app.waiter.y == app.currCustomer.y):
             app.mode = "scoreMode"
 
 # helper: check how good player is to modify game difficulty
@@ -224,7 +220,6 @@ def cafeMode_keyPressed(app, event):
         else:
             order = f"{drink} with {base} milk, {art}"
             app.currCustomer = Customer("1", 0, 145, custImg, drink, base, art, order)
-        app.customers.append(app.currCustomer)
         print(app.currCustomer.order)
         print(app.currCustomer.art)
         
@@ -257,7 +252,6 @@ def cafeMode_keyPressed(app, event):
 def getRandPos(app):
     randX = 95+50*random.randint(0, 4)
     randY = 95+50*random.randint(2, 8)
-    print (randX, randY)
     if app.boardGrid[getRow(app, randY)][getCol(app, randX)] == 0:
         return randX, randY
     else:
@@ -270,7 +264,6 @@ def moveChar(app, drow, dcol):
     char = app.activeChar
     char.x += drow
     char.y += dcol
-    # char.isoX, char.isoY = cartIso(char.x, char.y)
     
     if not moveIsLegal(app):
         char.x -= drow
@@ -280,12 +273,13 @@ def moveChar(app, drow, dcol):
 # helper fn: check if move can be made (not out of bounds)
 def moveIsLegal(app):
     char = app.activeChar
-    if (app.boardGrid[getRow(app, char.y)][getCol(app, char.x)] == 0) and char.x >= 70 and char.x <= 570 and char.y>= 120 and char.y<=570:
+    if char.x >= 70 and char.x <= 570 and char.y>= 120 and char.y<=570 and (app.boardGrid[getRow(app, char.y)][getCol(app, char.x)] == 0):
         return True
     return False
 
 # helper: pathfinding algorithm
 def pathfinding(app, start, end):
+
     # initialization
     start_node = Node(None, start)
     end_node = Node(None, end)
@@ -326,10 +320,11 @@ def pathfinding(app, start, end):
             node_position = (current_node.position[0] + new_position[0], current_node.position[1] + new_position[1])
 
             # check legality of move in board
-            # if node_position[0] > 545 or node_position[0] < 95 or node_position[1] > 545 or node_position[1] < 95:
-            #     print("out of bounds")
-            #     continue
-            if app.boardGrid[getRow(app, node_position[0]-25)][getCol(app, node_position[1]-25)] != 0:
+            if (node_position[0] > 495) or (node_position[0] < 95) or (node_position[1] > 495)or (node_position[1] < 195):
+                print("out of bounds")
+                continue
+            if app.boardGrid[getRow(app, node_position[0])][getCol(app, node_position[1])] != 0:
+                print("0 detected")
                 continue
 
             # Create new node
@@ -357,6 +352,8 @@ def pathfinding(app, start, end):
             # Add the child to the open list
             open_list.append(child)
 
+        print(app.path)
+
 def cafeMode_mousePressed(app, event):
     x = event.x
     y = event.y
@@ -366,45 +363,4 @@ def cafeMode_mousePressed(app, event):
 
 
 
-
-
-
-# 2d to isometric
-# SOURCES:
-# https://gamedevelopment.tutsplus.com/tutorials/creating-isometric-worlds-primer-for-game-developers-updated--cms-28392
-# https://gamedevelopment.tutsplus.com/tutorials/updated-primer-for-creating-isometric-worlds-continued--cms-28503
-
-# def cartIso(app,cartX, cartY):
-#     isoX = (cartX - cartY) * app.cellSize/2
-#     isoY = (cartX + cartY)/2
-#     return isoX, isoY
-
-# def isoCart(isoX, isoY):
-#     cartX = (2*isoY + isoX)/2
-#     cartY = (2*isoY - isoX)/2
-#     return cartX, cartY
-
-#  def cartToIso(self, cartX, cartY, scalingFactor):
-#         cartX -= self.offsetX 
-#         cartY -= self.offsetY 
-#         cartX = cartX / scalingFactor
-#         cartY = cartY / scalingFactor 
-#         isoX = cartX - cartY
-#         isoY = (cartX + cartY) / 2
-#         return isoX, isoY
-
-#     def isoToCart(self, isoX, isoY, scalingFactor):
-#         cartX = (2 * isoY + isoX) / 2
-#         cartY = (2 * isoY - isoX) / 2
-#         cartX = cartX / scalingFactor
-#         cartY = cartY / scalingFactor
-#         cartX += offsetX 
-#         cartY += offsetY 
-#         return cartX, cartY 
-
-#     def setUpIsometric(self):
-#         #self.tileWidthHalf = self.tileWidth//2
-#         #self.tileHeightHalf = self.tileHeight//2
-#         self.offsetX = -1000
-#         self.offsetY = -270
 

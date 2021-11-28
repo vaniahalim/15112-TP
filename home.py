@@ -1,6 +1,4 @@
-# SCREEN: homeMode
-# TO ADD: tkentry to get user input
-
+# SCREEN: splash screen, first to open in the beginning
 # import modules
 from cmu_112_graphics_openCV import *
 import random
@@ -12,7 +10,7 @@ VIEW
 def homeMode_redrawAll(app, canvas):
     canvas.create_image(app.width/2, app.height/2, image=app.homeImg)
     canvas.create_text(app.width*0.25, app.height*0.11, text=f"Hi {app.username}! It's day {app.day}!", font="Arial 28 bold", fill="#481C0A")
-    # canvas.create_window(app.width/2, app.height/1.2, width= 300, window=app.selectUser)
+    
 '''''''''''''''''''''''''''''''''
 CONTROLLER
 '''''''''''''''''''''''''''''''''
@@ -37,16 +35,4 @@ def homeMode_mousePressed(app, event):
             app.tables.append(table)
         for table in app.tables:
             app.boardGrid[getRow(app, table.y)][getCol(app, table.x)] = 1
-            print(getRow(app, table.y), getCol(app, table.x))
-            print(table.y, table.x)
-        print(app.tables)
         print(app.boardGrid)
-
-def homeMode_keyPressed(app, event):
-    if event.key == "Return" or event.key == "Enter":
-        app.mode = "cafeMode"
-        # check if username is in app.usernames list, if not create a new user
-        app.user = app.selectUser.get()
-        print("entered")
-        
-

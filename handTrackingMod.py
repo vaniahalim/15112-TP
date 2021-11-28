@@ -6,7 +6,6 @@
 import cv2
 import mediapipe as mp
 import numpy as np
-import time # check framerate
 
 class handDetector():
     def __init__(self, mode=False, maxHands=1, modelComplexity=1, detectionCon=0.5, trackCon=0.5):

@@ -20,7 +20,6 @@ def latteArtMode_redrawAll(app, canvas):
     canvas.create_text(app.width/2, app.height*0.2, text="Use index finger to pour the foam; Raise 2 or more fingers to stop", font="Avenir 16")
     canvas.create_text(app.width/2, app.height*0.85, text="Tip: work inside the black circle and pour slowly...", font="Avenir 16")
     canvas.create_image(app.width*0.9, app.height*0.92, image=app.rightArrowImg)
-    # canvas.create_image(app.width*0.1, app.height*0.92, image=app.leftArrowImg)
     canvas.create_image(app.width/2+10, app.height/2+20, image=app.cup)
     canvas.create_oval(app.width/2-app.currBase.r, app.height/2-app.currBase.r, app.width/2+app.currBase.r, app.height/2+app.currBase.r, fill=app.currBase.color, width=0)
     # show camera
@@ -36,15 +35,13 @@ CONTROLLER
 def latteArtMode_mousePressed(app, event):
     x = event.x
     y = event.y
-    print(distance(x, y, app.width*0.1, app.height*0.92))
-    # if distance(x, y, app.width*0.1, app.height*0.92) < 30:
-    #    app.mode = "makeDrinkMode"
+    
     if distance(x, y, app.width*0.9, app.height*0.92) < 30:
         app.mode = "cafeMode"
         app.isServing = True
         app.activeChar = app.waiter
+        app.barista.x, app.barista.y = (395, 195)
         app.waiter.x, app.waiter.y = (395, 395)
-        # app.camera.release()
         app.disp_cam = False
       
    
@@ -64,10 +61,8 @@ def latteArtMode_cameraFired(app):
     detector = handDetector(detectionCon = 0.8)
     # initialize starting location
     x_prev, y_prev = 0, 0
-    # draw on canvas instead of camera screen
-   
+ 
     # import image
-
     img = app.frame
     # find hand landmarks
     img = detector.findHands(img)
@@ -75,7 +70,6 @@ def latteArtMode_cameraFired(app):
 
     if len(lmList) != 0: # if landmark on screen
         x_index, y_index = lmList[8][1:] # x,y coordinates of finger
-        print(lmList[8][1:])
         x_mid, y_mid = lmList[12][1:]
 
         # check which fingers are up
@@ -85,13 +79,9 @@ def latteArtMode_cameraFired(app):
         # selection mode: 2 fingers are up
         if fingers[1] == 1 and fingers[2] == 1:
             x_prev, yprev = 0, 0 # reset position of finger everytime you select
-        
-            print("stop!")
-            # select colour
 
         # drawing mode: index finger is up
         if fingers[1]==1 and fingers[2] == 0:
-            print("draw!")
             drawColor = (255,255,255) # choose color (white currently)
             cv2.circle(img, (x_index, y_index), 15, drawColor, cv2.FILLED)
             
@@ -106,27 +96,16 @@ def latteArtMode_cameraFired(app):
 
     cv2.putText(img, "Draw here!", (30,100), cv2.FONT_HERSHEY_PLAIN, 3, (255,0,255), 3)
     cv2.circle(img, (640, 360), 300, (0, 0, 0), 2)
-    print
-    
-    # remove prev picture
-    # try: 
-    #     os.remove("Player drawing.jpg")
-    # except: 
-    #     pass
-
-    # cv2.imshow("Latte art!", img)
-    # cv2.imshow("Canvas", imgCanvas) # show canvas of drawing
     
     #save file
     cv2.imwrite("result.jpg", app.imgCanvas)
-    # cv2.waitKey(1) # 0 gives still images
-    
+ 
 def latteArtMode_keyPressed(app, event):
     if event.key == "c":
         app.imgCanvas = np.zeros((200,200,4), np.uint8) 
         a,b,c = hexToRgb(app.currBase.color)
+        # change color of canvas to match drink color
         app.imgCanvas[:,:] = [c, b, a, 0]
-        print(app.imgCanvas[0][0])
         app.disp_cam = True
 
 def latteArtMode_timerFired(app):
