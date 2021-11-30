@@ -52,7 +52,7 @@ def appStarted(app):
     app.counter = 0
     app.difficulty = ["normal"]
 
-    app.mode = 'endMode'
+    app.mode = 'homeMode'
     print(app.mode)
     app.cameraOpen = False
     app.disp_cam = False
