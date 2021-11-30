@@ -51,7 +51,10 @@ def cafeMode_redrawAll(app, canvas):
     canvas.create_rectangle(app.width/2 - 100, 590, app.width/2 + 100, 620, fill="lightgrey", width=0.5)
     if not app.win and not app.timeOver:
         canvas.create_rectangle(app.width/2 - 100, 590, app.width/2-100+(app.score/app.winScore)*200, 620, fill="pink")
-    canvas.create_text(app.width/2, 605, text="Progress...")
+        canvas.create_text(app.width/2, 605, text="Progress...")
+    if app.win:
+        canvas.create_rectangle(app.width/2 - 100, 590, app.width/2 + 100, 620, fill="pink", width=0.5)
+        canvas.create_text(app.width/2, 605, text="Complete!")
     # draw timer
     canvas.create_image(605, app.height/2, image=app.timerImg)
     if not app.timeOver:
@@ -212,14 +215,8 @@ def cafeMode_keyPressed(app, event):
         drink = app.drinks[random.randint(0, app.drinksShown-1)]
         base = app.bases[random.randint(1, len(app.bases)-1)]
         art = app.arts[random.randint(0, len(app.arts)-1)]
-        if app.day > 2:
-            pastry = app.pastries[random.randint(0, app.pastriesShown-1)]
-            order = f"{drink} with {base} milk, {art} + {pastry}"
-            app.currCustomer = Customer("1", 0, 145, custImg, drink, base, art, order, pastry)
-            print(app.currCustomer.pastry)
-        else:
-            order = f"{drink} with {base} milk, {art}"
-            app.currCustomer = Customer("1", 0, 145, custImg, drink, base, art, order)
+        order = f"{drink} with {base} milk, {art}"
+        app.currCustomer = Customer("1", 0, 145, custImg, drink, base, art, order)
         print(app.currCustomer.order)
         print(app.currCustomer.art)
         
@@ -323,9 +320,9 @@ def pathfinding(app, start, end):
             if (node_position[0] > 495) or (node_position[0] < 95) or (node_position[1] > 495)or (node_position[1] < 195):
                 print("out of bounds")
                 continue
-            if app.boardGrid[getRow(app, node_position[0])][getCol(app, node_position[1])] != 0:
-                print("0 detected")
-                continue
+            # if app.boardGrid[getRow(app, node_position[0])][getCol(app, node_position[1])] != 0:
+            #     print("0 detected")
+            #     continue
 
             # Create new node
             new_node = Node(current_node, node_position)

@@ -52,7 +52,7 @@ def appStarted(app):
     app.counter = 0
     app.difficulty = ["normal"]
 
-    app.mode = 'homeMode'
+    app.mode = 'endMode'
     print(app.mode)
     app.cameraOpen = False
     app.disp_cam = False
@@ -71,12 +71,15 @@ def appStarted(app):
     app.board = [([app.emptyColor] * app.cols) for row in range(app.rows)]
     app.boardGrid = [([0] * app.cols) for row in range(app.rows)]
     app.score = 0
+    app.drinksShown = 4
     app.winScore = 10
-    if app.day >= 5:
+    if app.day >= 3:
         app.winScore = 12
-    if app.day >= 10:
+        app.drinksShown = 5
+    if app.day >= 5:
         app.winScore = 15
-    app.win = True
+        app.drinksShown = 6
+    app.win = False
     app.time = 0
     app.gameTime = 5000
     app.timeOver = False
@@ -126,10 +129,9 @@ def appStarted(app):
 
     # orders
     app.cup = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/topviewcup.png"), 0.9))
-    app.pastries = ['Croissant', 'Donut', 'Muffin', 'Scone']
-    app.pastriesShown = 2
+    # app.pastries = ['Croissant', 'Donut', 'Muffin', 'Scone']
+    # app.pastriesShown = 2
     app.drinks = ['Latte', 'Macchiato', 'Cappucino', 'Cortado', "Matcha", "Mocha", "Chai"]
-    app.drinksShown = 4
     app.espresso = Base("espresso", "#481C0A", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/coffebeans.png"),1/10)))
     app.dairy = Base("dairy", "#F6F1EF", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/dairymilk.png"),1/10)))
     app.oat = Base("oat", "#F2E8D4", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/oatmilk.png"),1/10)))

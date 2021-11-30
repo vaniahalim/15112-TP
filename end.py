@@ -33,6 +33,7 @@ def endMode_mousePressed(app, event):
         app.mode = "homeMode"
         app.isStarting = True
         app.currCustomer = None
+        app.isOrdering = False
         app.time = 0
         
         # update player progress if they passed level

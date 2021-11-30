@@ -1,5 +1,4 @@
 # La Barista (15112 Term Project)
-
 **Project Description** \
 La Barista is a cafe game inspired by Papa's Freezeria. In this game, the player controls both the barista who takes orders and makes drinks, and the waiter who serves the drinks to the customer. To pass a level, the player has to reach a target score (calculated by the accuracy of each drink made as well as how similar the latte art is to the customer's desired design) before La Barista closes for the day.
 

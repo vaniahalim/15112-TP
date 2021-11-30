@@ -41,7 +41,10 @@ def scoreMode_redrawAll(app, canvas):
         flav = "mocha"
     if app.currCustomer.drink == "Chai":
         flav = "chai"
-    canvas.create_text(app.width/4, app.height*0.6, text=f"Ingredients... {flav}, {app.currCustomer.base}, foam")
+    if app.currCustomer.drink in ["Macchiato", "Cortado"]:
+        canvas.create_text(app.width/4, app.height*0.6, text=f"Ingredients... {flav}, foam")
+    else:
+        canvas.create_text(app.width/4, app.height*0.6, text=f"Ingredients... {flav}, {app.currCustomer.base}, foam")
     canvas.create_text(app.width/4, app.height*0.65, text=f"Proportions...{app.drinkOrder}")
     # player creation
     canvas.create_text(app.width*0.75, app.height*0.6, text=f"{getIngredients(app, app.drinkMade)}")
@@ -197,11 +200,22 @@ def scoreMode_mousePressed(app, event):
         if app.score >= app.winScore:
             app.win = True
 
-        # create new cup
+        # reset drink variables
         app.currBase = Base("empty", "#FFFFFF", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/coffebeans.png"),1/10)))
         app.cupFull = False
         app.drinkMade = dict()
+        app.espresso.r = 0
+        app.dairy.r = 0
+        app.oat.r = 0
+        app.soy.r = 0
+        app.almond.r = 0
+        app.matcha.r = 0
+        app.mocha.r = 0
+        app.chai.r = 0
+        app.foam.r = 0
 
+        print(app.currBase)
+        print(app.drinkMade)
         app.mode = "cafeMode"
         
     
