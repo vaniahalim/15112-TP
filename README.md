@@ -16,11 +16,11 @@ scikit-image
 
 **Shortcut commands** \
 _Screens:_\
-pop-up: input username to save progress\
-home: splash screen to start game (press play to start) \
-cafe: click help button for instructions; move to menu icon for menu; move to coffee machine to make drink (drink making screen)\
-drink making: click on icons to add ingredients to cup; click next for latte art screen \
-latte art: press c to open camera (openCV); draw using index finger within black circle on screen; click next for cafe screen \
-cafe: use arrow keys to deliver drink to customer and go to score screen \
-score: scoring results based on ingredients, proportions and art; click next to move on to next customer \
-end: when time runs out, you will know if you can move on to the next day based on your progress \
+**pop-up**: input username to save progress\
+**home**: splash screen to start game (press play to start) \
+**cafe**: click help button for instructions; move to menu icon for menu; move to coffee machine to make drink (drink making screen)\
+**drink making**: click on icons to add ingredients to cup; click next for latte art screen \
+**latte art**: press c to open camera (openCV); draw using index finger within black circle on screen; click next for cafe screen \
+**cafe**: use arrow keys to deliver drink to customer and go to score screen \
+**score**: scoring results based on ingredients, proportions and art; click next to move on to next customer \
+**end**: when time runs out, you will know if you can move on to the next day based on your progress \
