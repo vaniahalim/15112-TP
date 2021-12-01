@@ -303,7 +303,6 @@ def pathfinding(app, start, end):
 
             # check legality of move in board
             if (node_position[0] > 495) or (node_position[0] < 95) or (node_position[1] > 495) or (node_position[1] < 195):
-                print("out of bounds")
                 continue
             # if app.boardGrid[getRow(app, node_position[0])][getCol(app, node_position[1])] != 0:
             #     print("0 detected")

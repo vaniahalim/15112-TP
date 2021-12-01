@@ -72,22 +72,25 @@ CONTROLLER
 # drinkMade is a dictionary containing espresso + milk bases and their radii
 # customer is app.currCustomer
 def correctBase(drinkMade, customer):
+    if "foam" not in drinkMade: return False
     if customer.drink in ["Latte", "Cappucino","Macchiato", "Cortado"]:
         if "espresso" not in drinkMade: return False
-    if customer.drink == "Matcha":
+    elif customer.drink == "Matcha":
         if "matcha" not in drinkMade: return False
-    if customer.drink == "Mocha":
+    elif customer.drink == "Mocha":
         if "mocha" not in drinkMade: return False
-    if customer.drink == "Chai":
+    elif customer.drink == "Chai":
         if "chai" not in drinkMade: return False
-    if "foam" not in drinkMade: return False
+    
     # more than 1 milk base
     if customer.drink in ["Macchiato", "Cortado"]:
-        if len(drinkMade) != 2 : return False
-    if customer.drink in ["Latte", "Cappucino", "Matcha", "Mocha", "Chai"]:
-        if customer.base not in drinkMade: return False
+        if len(drinkMade) != 2 : 
+            return False
+    elif customer.drink in ["Latte", "Cappucino", "Matcha", "Mocha", "Chai"]:
         # wrong base
-        if len(drinkMade) != 3 : return False
+        if customer.base not in drinkMade: return False
+        if len(drinkMade) != 3 : 
+            return False
     return True
 
 # helper: checks if drink made has the right proportion of espresso and milk and milk foam
@@ -175,10 +178,6 @@ def scoreMode_timerFired(app):
         app.isCorrectBase = True
     if correctProportions(app, app.drinkMade, app.currCustomer):
         app.isCorrectProportions = True
-    
-    print(app.drinkMade)
-    print(app.currCustomer.drink)
-    print(app.currCustomer.base)
    
 def scoreMode_mousePressed(app, event):
     x = event.x
