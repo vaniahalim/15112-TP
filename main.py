@@ -44,8 +44,9 @@ def appStarted(app):
     f.close()
     print(app.day)
 
-    # bg music
+    # bg music: https://freemusicarchive.org/music/Lobo_Loco
     # SOURCE: https://www.cs.cmu.edu/~112/notes/notes-animations-part4.html#playingSoundsWithPygame
+
     pygame.mixer.init()
     app.sound = Sound("music2.mp3")
     app.sound.start(loops=-1)
