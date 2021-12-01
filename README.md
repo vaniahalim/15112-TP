@@ -23,4 +23,4 @@ _Screens:_\
 **latte art**: press c to open camera (openCV); draw using index finger within black circle on screen; click next for cafe screen \
 **cafe**: use arrow keys to deliver drink to customer and go to score screen \
 **score**: scoring results based on ingredients, proportions and art; click next to move on to next customer \
-**end**: when time runs out, you will know if you can move on to the next day based on your progress \
+**end**: when time runs out, you will know if you can move on to the next day based on your progress
