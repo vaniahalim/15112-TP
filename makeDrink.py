@@ -164,9 +164,6 @@ def makeDrinkMode_mousePressed(app, event):
     elif distance(x, y, app.width*0.1, app.height*0.92) < 30:
         app.mode = "cafeMode"
 
-    print(app.currBase)
-    print(app.drinkMade)
-
 def makeDrinkMode_timerFired(app):
     if app.time >= app.gameTime: 
         app.timeOver

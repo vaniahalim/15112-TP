@@ -204,7 +204,6 @@ def cafeMode_keyPressed(app, event):
         order = f"{drink} with {base} milk, {art}"
         app.currCustomer = Customer("1", 0, 145, custImg, drink, base, art, order)
         print(app.currCustomer.order)
-        print(app.currCustomer.art)
         
     # toggle beetween characters
     if event.key == "b":
@@ -334,8 +333,6 @@ def pathfinding(app, start, end):
 
             # Add the child to the open list
             open_list.append(child)
-
-        print(app.path)
 
 def cafeMode_mousePressed(app, event):
     x = event.x

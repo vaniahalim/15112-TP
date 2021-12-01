@@ -84,10 +84,10 @@ def correctBase(drinkMade, customer):
     # more than 1 milk base
     if customer.drink in ["Macchiato", "Cortado"]:
         if len(drinkMade) != 2 : return False
-    if customer.drink in ["Latte", "Cappucino"]:
+    if customer.drink in ["Latte", "Cappucino", "Matcha", "Mocha", "Chai"]:
+        if customer.base not in drinkMade: return False
+        # wrong base
         if len(drinkMade) != 3 : return False
-    # wrong base
-    if customer.base not in drinkMade: return False
     return True
 
 # helper: checks if drink made has the right proportion of espresso and milk and milk foam
@@ -175,6 +175,10 @@ def scoreMode_timerFired(app):
         app.isCorrectBase = True
     if correctProportions(app, app.drinkMade, app.currCustomer):
         app.isCorrectProportions = True
+    
+    print(app.drinkMade)
+    print(app.currCustomer.drink)
+    print(app.currCustomer.base)
    
 def scoreMode_mousePressed(app, event):
     x = event.x
@@ -213,9 +217,6 @@ def scoreMode_mousePressed(app, event):
         app.mocha.r = 0
         app.chai.r = 0
         app.foam.r = 0
-
-        print(app.currBase)
-        print(app.drinkMade)
         app.mode = "cafeMode"
         
     

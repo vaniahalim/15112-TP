@@ -130,8 +130,6 @@ def appStarted(app):
 
     # orders
     app.cup = ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/topviewcup.png"), 0.9))
-    # app.pastries = ['Croissant', 'Donut', 'Muffin', 'Scone']
-    # app.pastriesShown = 2
     app.drinks = ['Latte', 'Macchiato', 'Cappucino', 'Cortado', "Matcha", "Mocha", "Chai"]
     app.espresso = Base("espresso", "#481C0A", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/coffebeans.png"),1/10)))
     app.dairy = Base("dairy", "#F6F1EF", ImageTk.PhotoImage(app.scaleImage(app.loadImage("images/dairymilk.png"),1/10)))

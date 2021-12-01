@@ -19,7 +19,7 @@ scikit-image
 _Screens:_\
 **pop-up**: input username to save progress\
 **home**: splash screen to start game (press play to start) \
-**cafe**: click help button for instructions; move to menu icon for menu; move to coffee machine to make drink (drink making screen)\
+**cafe**: click help button for instructions; move to menu icon for menu; move to coffee machine to make drink (drink making screen); press space to get orders\
 **drink making**: click on icons to add ingredients to cup; click next for latte art screen \
 **latte art**: press c to open camera (openCV); draw using index finger within black circle on screen; click next for cafe screen \
 **cafe**: use arrow keys to deliver drink to customer and go to score screen \
