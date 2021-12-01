@@ -117,26 +117,12 @@ CONTROLLER
 '''''''''''''''''''''''''''''''''
 def cafeMode_timerFired(app):
     # set up board
-    # app.board = [([app.emptyColor] * app.cols) for row in range(app.rows)]
-    # app.boardGrid = [([0] * app.cols) for row in range(app.rows)]
-    # app.boardGrid[getRow(app, app.cofMac.y)][getCol(app, app.cofMac.x)] = 1
-    # for table in app.tables:
-    #     app.boardGrid[getRow(app, table.y)][getCol(app, table.x)] = 1
-    #     print(app.boardGrid)
-    # app.board[getRow(app, app.barista.y)][getCol(app, app.barista.x)] = "blue"
-    # app.boardGrid[getRow(app, app.barista.y)][getCol(app, app.barista.x)] = 1
-    # app.board[getRow(app, app.waiter.y)][getCol(app, app.waiter.x)] = "orchid"
-    # app.boardGrid[getRow(app, app.waiter.y)][getCol(app, app.waiter.x)] = 1
     for row in range(10):
         for col in range(10):
             if row == getRow(app,app.activeChar.y) and col == getCol(app,app.activeChar.x):
                 app.board[row][col] = "blue"
             else:
                 app.board[row][col] = app.emptyColor
-
-    # indicate position on board as filled
-    # if app.currCustomer != None:
-    #     app.boardGrid[getRow(app, app.currCustomer.y)][getCol(app, app.currCustomer.x)] = 1
 
     # end of day
     if app.time >= app.gameTime: 
@@ -317,7 +303,7 @@ def pathfinding(app, start, end):
             node_position = (current_node.position[0] + new_position[0], current_node.position[1] + new_position[1])
 
             # check legality of move in board
-            if (node_position[0] > 495) or (node_position[0] < 95) or (node_position[1] > 495)or (node_position[1] < 195):
+            if (node_position[0] > 495) or (node_position[0] < 95) or (node_position[1] > 495) or (node_position[1] < 195):
                 print("out of bounds")
                 continue
             # if app.boardGrid[getRow(app, node_position[0])][getCol(app, node_position[1])] != 0:

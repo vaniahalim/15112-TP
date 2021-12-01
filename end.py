@@ -52,4 +52,3 @@ def endMode_mousePressed(app, event):
             f.writelines(lines)
             f.close()
         
-        print(app.day)

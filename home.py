@@ -35,6 +35,4 @@ def homeMode_mousePressed(app, event):
             app.tables.append(table)
         for table in app.tables:
             app.boardGrid[getRow(app, table.y)][getCol(app, table.x)] = 1
-        print(app.boardGrid)
-        print(app.drinksShown)
-        print(app.winScore)
+        
